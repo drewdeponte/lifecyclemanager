@@ -1,0 +1,17 @@
+Metadata-Version: 1.0
+Name: TracRequirements
+Version: 0.1
+Summary: Tracks project requirements and their impact on development.
+Home-page: https://extsvn.cyph.org:8000/projects/trac_req_ext
+Author: Lifecycle Manager Dev Team
+Author-email: UNKNOWN
+License: GNU GPL v2
+Description: 
+        Lifecycle Manager is a full-featured collaborative project management
+        environment seamlessly integrating project milestones, requirements, tickets,
+        documentation, and artifact versioning in a multi-user concurrent
+        service-oriented infrastructure. Lifecycle Manager may be used to record,
+        predict, and evaluate performance of project features and teams, allowing
+        better planning and management of development efforts ranging from simple to complex.
+        
+Platform: UNKNOWN

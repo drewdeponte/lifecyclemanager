@@ -1,0 +1,11 @@
+[trac.plugins]
+NewrequirementAjaxModule = requirement.web_ui
+RequirementSystem = requirement.api
+CacheComponent = requirement.cache
+RequirementGraphComponent = requirement.graph
+RequirementComponent = requirement.requirement
+NewrequirementModule = requirement.web_ui
+ViewModule = requirement.view
+RequirementModule = requirement.web_ui
+ReportModule = requirement.report
+

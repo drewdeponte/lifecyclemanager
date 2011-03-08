@@ -1,0 +1,47 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lm-latex}[2008/01/31 Lifecycle Manager doc style]
+
+\RequirePackage{hyperref}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{ulem}
+\RequirePackage{natbib}
+
+\hypersetup{colorlinks=true,bookmarksopen=true}
+
+% Requirements identification
+\newcommand\req[3]{\href{\ourtrac{requirement/#1-#2-#3}}{\texttt{<#1 #2 #3>}}}
+
+\newcommand\nreq[5]{\href{\ourtrac{requirement/#1-#2-#3}}{\texttt{<#1 #2 #3>}} -- #4 \paragraph{Test Case:} #5}
+
+% Linking
+\newcommand\ourtrac[1]{http://www.insearchofartifice.com/lifecyclemanager/#1}
+\newcommand\ourwiki[1]{\href{\ourtrac{wiki/#1}}{#1}}
+
+
+% Math
+
+\DeclareMathOperator{\Pmi}{Pmi}
+\DeclareMathOperator{\Prj}{Pr}
+\DeclareMathOperator{\Prn}{Pr}
+
+\def\dashuline{\bgroup
+  \ifdim\ULdepth=\maxdimen  % Set depth based on font, if not set already
+   \settodepth\ULdepth{(j}\advance\ULdepth.4pt\fi
+  \markoverwith{\kern.1em
+  \vtop{\kern\ULdepth \hrule width .2em}%
+  \kern.1em}\ULon}
+
+\newcommand{\seq}[1]{\mathbf{#1}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\pred}[1]{\mathfrak{#1}}
+\newcommand{\comp}{\mathtt{comp}}
+\newcommand{\fp}{\mathtt{fp}}
+\newcommand{\obj}{\mathtt{obj}}
+\newcommand{\status}{\mathtt{status}}
+\newcommand{\desc}{\mathtt{\dashuline{desc}}}
+\newcommand{\user}{\mathtt{user}}
+\newcommand{\field}{\mathtt{field}}
+\newcommand{\val}{\mathtt{value}}
+\newcommand{\ctime}{\mathtt{time}}
+

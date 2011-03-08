@@ -1,0 +1,7 @@
+
+pre.diff {
+    width: 700px;
+    height: 300px;
+    overflow: auto;
+    border: 1px solid black;
+}

@@ -1,0 +1,86 @@
+/* Copyright 2007-2008 Lifecycle Manager Development Team
+*  http://www.insearchofartifice.com/lifecyclemanager/wiki/DevTeam
+*
+*  This file is part of Lifecycle Manager.
+*
+*  Lifecycle Manager is free software: you can redistribute it and/or
+*  modify it under the terms of the GNU General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*
+*  Lifecycle Manager is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Lifecycle Manager.  If not, see
+*  <http://www.gnu.org/licenses/>.
+*/
+
+#content {
+ width: 90%;
+} 
+
+legend {
+ color: black;
+}
+
+fieldset {
+color: black;
+border: 1px solid black;
+}
+
+#sidebar {
+ width: 15em;
+ border: 1px solid;
+ float: left;
+ margin-right: 20px;
+ padding: 1em 0em 1em 1em;
+}
+
+#sidebar ul{
+ list-style-type: none;
+  padding: 0em 0em 0em 1em;
+}
+
+.itemlist {
+ float: left;
+ margin-bottom: 1em;
+}
+
+.newitem {
+ width: 30%;
+ float: right;
+ margin-bottom: 1em;
+}
+
+#object .hidden{display: none;}
+
+#object table.list{ border: 1px solid black; width: 520px;}
+#object span{ color: #b00; display: block;}
+
+#object table.list td.status{
+ border-top: 1px solid black;
+ border-right: 1px solid black;
+ padding: .2em;
+}
+#object table.list td.description{
+ border-top: 1px solid black;
+ padding: .2em;
+}
+#object table.list td.name{
+ border-top: 1px solid black;
+ border-right: 1px solid black;
+ padding: .2em;
+}
+
+#object table.list tr{border-top: 1px solid red;}
+
+#fphyponym {
+
+}
+
+#adminsettings {
+
+}

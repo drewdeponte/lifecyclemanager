@@ -1,0 +1,1226 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage{lm-latex}
+\usepackage[toc,page]{appendix}
+\usepackage{graphicx}
+
+
+\title{Lifecycle Manager: An Open-Source Requirements Tracking \& Ticketing System}
+\author{
+  Andrew J. De Ponte\footnote{\href{mailto:ajd46@humboldt.edu}{ajd46@humboldt.edu}}, \\
+  Joshua Eckroth\footnote{\href{mailto:joshuaeckroth@yahoo.com}{joshuaeckroth@yahoo.com}}, \\
+  Jon Koriagin\footnote{\href{mailto:koriagin@yahoo.com}{koriagin@yahoo.com}}, \\
+  Louis Omgba\footnote{\href{mailto:ojulos@gmail.com}{ojulos@gmail.com}}, \\
+  Quinn Peters\footnote{\href{mailto:contact@quinnpeters.net}{contact@quinnpeters.net}} \\
+  \\
+  Department of Computer Science\\
+  Humboldt State University}
+\date{}
+
+\begin{document}
+	\bibliographystyle{abbrv}
+	
+        \maketitle
+			
+        \begin{abstract}
+          This paper introduces Lifecycle Manager, a tool for managing
+          software development and tracking changes to design
+          artifacts over the product's lifetime. The tool tracks
+          functional requirements, tickets and code as well as other
+          forms of documentation. What differentiates Lifecycle
+          Manager from other ticketing and documentation systems is
+          its unique framework for documenting functional requirements
+          with a syntax and semantics that reduce ambiguity and
+          enable quantitative metrics. In addition, Lifecycle Manager
+          provides an easy mechanism for referring to functional
+          requirements in various design artifacts, such as tickets or
+          documentation, and builds reports and metrics from these
+          references. Such reports and metrics correlate changes in
+          functional requirements and documentation, reports of
+          defects, and milestone deadlines, enabling project managers
+          and developers to better understand and plan their design
+          processes throughout the whole lifecycle.
+        \end{abstract}
+        
+        {\parindent 0pt \footnotesize \emph{Keywords:} Requirements, requirements tracing, Common Functional Modeling Framework, Trac, software design}
+        
+        \vspace{.1in}
+        
+	\section{Introduction}
+
+        \subsection{Background}
+
+        It has been said that ``Design is relevant to all software
+        engineering activities and is the central integrating activity
+        that ties the others together'' \cite{freeman}.  Though Peter
+        Freeman's quote is now over a quarter of a century old it is
+        just as applicable today as ever.  Design is one of the most
+        important activities a software developer does, as well as one
+        of the most important artifacts a developer produces.  Indeed,
+        the challenges of software design today are the same as they
+        were at the time of Freeman's quote and before: the creation
+        of workable models, of new conceptions, and the analyses of
+        these.  It has also been said that the study of design will
+        remain the central focus of software engineering in the future
+        \cite{simon,taylor_hoek}.  Yet, ironically, software design is
+        still far from being an established discipline.  It is
+        undervalued in general and not well understood, even in
+        academic research \cite{taylor_hoek}.  The costs of bad
+        design, especially bad initial design, are well established
+        \cite{bowen_hinchey}, but in the field there is a tendency not
+        to systematically analyze design mistakes.  There is a need to
+        learn from failure, which our field has distinctly failed to
+        do.  A ``we will just fix the code'' attitude is far too
+        prevalent.  In this respect, design is dramatically
+        undervalued.  Consequently there is a need to promote
+        excellence of design and document bad designs to illustrate
+        pitfalls.  This last point is key: software design needs
+        rigorous, scientific study.  Such a scientific approach is
+        available in other fields of design (e.g.: architectural), but
+        is distinctly underrepresented in the field of software
+        \cite{taylor_hoek}.
+
+        Most of the major threads of current software engineering
+        research relate to improving the design process, and several
+        main trends are expected to dominate the future of software
+        design.  They may be reduced to five basic categories
+        \cite{taylor_hoek}:
+
+        \begin{itemize}
+        \item Improvements of materials from which the design is made
+        \item Improvements of language used to express ideas of design
+        \item Improvements of knowledge of the design process
+        \item Improvements of activities used in the design process
+        \item Improvements of design tools 
+        \end{itemize}
+        
+        Our product seeks to aid in a several of these items via
+        an improved requirements language, support for recording
+        and referencing design knowledge, and interfaces for
+        better management and review of design activities.
+        
+        Among the present trends in software design is a move towards
+        agile methodologies.  Implicit in this approach to development
+        is the recognition that the design process typically extends
+        over the course of a product's lifetime and does not just
+        occur at the beginning. Supporting constant revision of design
+        artifacts, such as software requirements and documentation, is
+        an essential component of any agile tool, and well-integrated
+        in Lifecycle Manager.
+
+        In order to assure the advances noted above several key
+        imperatives must be met.  One is the ability to fluidly move
+        between design and coding tasks as key design decisions tend
+        to be made during implementation.  Consequently, ``Seamless
+        integration implies full traceability between code and higher
+        abstractions, and supports accountability of design
+        decisions'' \cite{taylor_hoek}.  Lifecycle Manager supports
+        such integration, and this integration is at the heart of our
+        project.
+
+        Another important imperative is the need to support design
+        recovery and analysis (in other words: how did we design that,
+        and can we design like that again?, or: can we do it better?).
+        Lifecycle Manager attempts to aid this process by allowing the
+        tracking of requirements.  By including requirements as
+        entities in our product we allow the designer the ability to
+        review at least some of the design process.  By doing so, it
+        is hoped that the development of future designs may be aided.
+        The requirements module offers some support for design
+        recovery and analysis; but it also offers much more than this.
+
+        Requirements tend to be closely tied to other design artifacts
+        such as tickets, code, and documentation.  They typically
+        dictate the course of the design, while changes to a
+        requirement will unquestionably alter the design itself,
+        sometimes profoundly.  Reciprocally, it is common to find that
+        difficulties in design or implementation may provoke a change
+        to a requirement or possibly even cause the designer to seek a
+        means of discarding the requirement.  Thus tracking changes to
+        requirements will indirectly track changes in the fundamental
+        design of a product over the course of that product's
+        development.
+
+        In Lifecycle Manager, alterations to requirements are recorded
+        and metrics regarding these alterations and their correlations
+        with other design artifacts are provided.  Thus, Lifecycle
+        Manager fulfils a need that is of substantial importance to
+        the software engineering process, a need that is missing from
+        most software development systems.
+
+        \subsection{The Lifecycle Manager Project}
+
+        Few software packages maintain software requirements
+        throughout the entire project lifecycle. As well, most
+        attempts at documenting and maintaining software requirements
+        suffer from a verbose requirements language syntax or use of
+        natural language. Finally, few metrics exist for analyzing
+        requirements documents in ways that inform project
+        development.
+
+        Lifecycle Manager tracks software requirements throughout the
+        project lifecycle and provides a simple but effective
+        requirements language syntax. Additionally, an
+        information-theoretic metric may be applied to the
+        requirements stored within the system, providing quantitative
+        insights into the impact of particular or groups of software
+        requirements on the overall design.
+
+        With the additions of user-tracking and milestone-deadline
+        support, Lifecycle Manager is a full-featured collaborative
+        project management environment seamlessly integrating project
+        milestones, requirements, tickets, documentation, and artifact
+        versioning in a multi-user concurrent service-oriented
+        infrastructure. Lifecycle Manager may be used to record,
+        predict, and evaluate performance of project features and
+        teams, allowing better planning and management of development
+        efforts ranging from simple to complex. In addition, Lifecycle
+        Manager is developed atop the proven Trac open-source
+        ticketing system\footnote{\url{http://trac.edgewall.org}}, in
+        which we leverage Trac's support for tickets, wiki pages, and
+        source code version control.
+            
+        What follows is a discussion of the Lifecycle Manager, its
+        constituent parts and how they work, and the motivation for
+        its development.  In Section \ref{sec:goals} we discuss the
+        goals of the Lifecycle Manager and how it tracks requirements,
+        tickets, code and documentation.  In Section \ref{sec:cfmf} we
+        discuss the Common Functional Modeling Framework (CFMF) used
+        to document software requirements in our system.  This
+        includes a discussion of the syntax and semantics used and the
+        information that this formal framework can provide.  In
+        Section \ref{sec:metrics} we discuss the various metrics that
+        may be obtained from the system.  Section \ref{sec:discussion}
+        provides for a general discussion of our approach.  Section
+        \ref{sec:future} includes an overview of possible future
+        directions and Section \ref{sec:conclusion} contains our
+        conclusions.  An appendix is also provided, listing the Lifecycle
+        Manager's functional requirements, given in the CFMF (Appendix
+        \ref{app:reqs}) as well as an application of the entropy
+        metric in Appendix \ref{app:entropy}.
+
+	\section{Goals of Lifecycle Manager}
+        \label{sec:goals}
+
+        The overall goal of the Lifecycle Manager is to quantify the
+        process of developing software so that this process can be
+        analyzed and optimized. It has the ability to track changes to
+        requirement specifications, tickets, code and documentation.
+        The intent is to store as much information as possible over
+        the course of a project's lifecycle.  The Lifecycle Manager
+        seeks to retain \emph{all} information regarding a project:
+        when tickets are made, who closed them out, when requirements
+        are created, who created them, who changed them and when.  All
+        this information is retained and may be used in one way or
+        another, as answers to simple queries or as constituent parts
+        of more complicated metrics.  Simple viewing of the more
+        prominent recent changes is provided by a timeline view which
+        shows recent changesets, tickets created or closed and changes
+        to the wiki.  Other views include a roadmap to provide
+        information on tickets as they relate to upcoming milestones,
+        an assortment of reports on requirements and an assortment of
+        reports on tickets as well.  In this way, Lifecycle Manager
+        creates an archeology of the project, retaining information
+        about the project's history, and available for in-process
+        analysis or future review.
+
+
+
+		\subsection{Tracking Requirements}
+
+            Lifecycle Manager provides for the creation and maintenance 
+            of requirements within its interface.  These can be altered 
+            over the course of time as the project develops in order to 
+            suit the nuances of the clients' needs.  Requirements 
+            can be altered, commented upon, enabled or disabled.
+
+            Lifecycle Manager also provides for the tracking of
+            requirements within its ticketing system or within its
+            wiki pages.  Like other artifacts, requirements are
+            referenced in a particular syntax, described in Section
+            \ref{sec:cfmf}. These references, as found in ticket
+            descriptions or comments, wiki pages, and so on, are
+            discovered by the system when the reference is made and
+            saved to a reference cache. This cache, or record of
+            references, enables the system to provide reports and
+            compute metrics that utilize such information. These
+            reports are described in Section \ref{sec:metrics}.
+
+
+		\subsection{Tracking Tickets}
+	
+                The Lifecycle Manager ticketing system provides for
+                the creation, maintenance and tracking of tickets.
+                These tickets are used to flag and keep track of tasks
+                or bugs during development and maintenance.  The
+                ticketing system used in Lifecycle Manager is
+                Trac\footnote{\url{http://trac.edgewall.org}}, a
+                popular, open-source ticketing system.  This software
+                has pre-defined rules for ticket tracking which are
+                similar to those used for requirements noted above.
+                Trac tracks ticket creation and information related to
+                the ticket's creation, such as who created the ticket,
+                when it was created, what kind of ticket it is (task
+                or fix, etc.) and so forth.  It tracks any kind of
+                change that is made to a ticket, such as change of
+                severity, change of owner, change of description,
+                change of associated milestone and so on.  Any comment
+                made about the ticket may be stored as well, with the
+                entire history of the ticket's comments made available
+                to the user when reading the ticket.  All information
+                about it is retained in the system.  Tickets
+                themselves are never deleted, but remain in the system
+                with a change of status such as ``fixed'' or
+                ``closed''\footnote{For more details on the Trac ticketing system, please see:
+            \url{http://trac.edgewall.org/wiki/TracTickets}}.
+	
+		\subsection{Tracking Code}
+	
+                Lifecycle Manager provides a code tracking system
+                which allows for the viewing of chagesets and the
+                differences they produce relative to the previous
+                version (what are known as ``diffs''---changes to
+                files).  These diffs can either be viewed side-by-side
+                or in-line.  Headers provide information about the
+                changeset: who made the change, when it was made and
+                so forth.  Again, as much information as possible is
+                retained with each change.  All changes in code are
+                stored\footnote{For more details on the Trac changeset
+                  system, please see:
+                  \url{http://trac.edgewall.org/wiki/TracChangeset}}.
+	
+		\subsection{Tracking Documentation}
+
+
+            Lifecycle Manager provides for tracking many forms of 
+            documentation via a project-wide wiki.  All changes to a wiki page are stored 
+            and all information related to it, such as date of creation, 
+            author and so forth are retained.  Diffs are available 
+            for viewing as well.  Any documentation that the development 
+            team wishes to retain as versioned documents can be kept in the 
+            wiki.
+
+            The wiki system used in Lifecycle Manager is powered by
+            Trac's built-in wiki engine\footnote{For more on
+              the Trac wiki engine, see:
+              \url{http://trac.edgewall.org/wiki/TracWiki}}.
+
+            \subsubsection{Documenting the Early Stages of the Design Process}
+
+                Sketching is the most common method for capturing design 
+                ideas in the field of Software Engineering today.  It 
+                requires nearly zero cognitive effort yet still allows for 
+                rapid externalization.  By sketching the designer may have a 
+                prop for short-term memory which simultaneously supplies an 
+                external image that is both informal and ambiguous.  This 
+                informality and ambiguousness is essential to the process, 
+                for they feed either the imagination and, hence, the 
+                creation of more designs or they feed the desire to refine.  
+                Some studies have revealed that designers tend to think about 
+                the underlying process when sketching, and that well drawn, 
+                ‘polished’, or computer produced images tend to inhibit 
+                reflection and discussion.  Hand drawn sketches are still the 
+                preferred initial design format for experienced designers 
+                \cite{goel,vetting_wolf_rode}.  Sketches might also be used 
+                to provide designers with details of a product.  These 
+                ``request sketches'' tend to be useful as well, providing more 
+                information then would normally be available through user 
+                stories or other usability testing techniques 
+                \cite{tohidi_buxton_baecker}.
+
+                The cognitive processes utilized in sketching tend to 
+                manifest themselves in a specific set of behaviors: they are 
+                often described as a rapid cycle of idea generation, with 
+                each idea being briefly considered.  Initially many ideas may 
+                be produced in quick succession.  This stage is then followed 
+                by periods of incubation and reflection.  Concurrently, 
+                existing ideas may be refined or new ones created 
+                \cite{goel,hailpern_hinterbichler_etal}.  Frequently these 
+                stages are referred to in the literature as divergent and 
+                convergent thinking, the former producing many designs, the 
+                later refining just a few \cite{hailpern_hinterbichler_etal}.  
+                These different stages of design are associated with 
+                different cognitive processes that use different kinds of 
+                symbol systems in the mind.
+
+                There are essentially three mechanisms that are needed for 
+                this initial phase of the design process:
+
+                    \begin{enumerate}
+                        \item Externalization
+                        \item Alternate representations
+                        \item Multiple ideas
+                    \end{enumerate}
+
+                To this list may be added collaboration, but it is not as 
+                essential as the first three for producing excellent 
+                designs.  Specifically, externalization is the act of 
+                capturing an emerging design idea, alternate representations 
+                provide different views of a given idea, and multiple ideas 
+                allow several different designs to be considered 
+                simultaneously.  Collaboration may be useful when decomposing 
+                a problem into manageable parts, but also helps in generating 
+                a large number of ideas.  Numbers 2 and 3 (and our nebulous 
+                4th) encourage cross-fertilization of design ideas.  All 
+                typically lead to the creation of more ideas 
+                \cite{hailpern_hinterbichler_etal}.
+
+                This sub-process differs in nature from the rest of the 
+                design process, both cognitively and behaviorally.  In most 
+                instances, therefore, the initial creative process is treated 
+                differently, and any attempts to force it into a mode of behavior 
+                outside of its natural manifestations often fail \cite{goel}.  
+                Indeed, the process may be volatile; under certain 
+                circumstances one dynamic may be considered a boon while 
+                under other circumstances the same may be considered a 
+                hindrance (for example, time constraints).  In the field of 
+                CHI recent studies have found that attempts to systematically 
+                model creative design are ill-suited for its practice, 
+                tending to compromise judgment and interpretation during 
+                design and stifling the flow of ideas or the creation of 
+                artifacts.  Such studies note that creative design has its 
+                own set of rigorous processes, though not as formal as other 
+                forms of design (say, engineering or architectural).  Though 
+                some activities may be seen as equivalent to those found in 
+                more systematic forms of design (e.g.: sketching in lieu of 
+                prototyping, design critiques in  place of testing, etc.), 
+                such comparisons are not necessarily appropriate nor 
+                applicable \cite{goel,vetting_wolf_rode}.  Similar 
+                conclusions are generally understood in the field of design 
+                as a whole and emphasis is consequently placed on the capture 
+                of ideas during this stage of design while attempting not to 
+                inhibit it in any other way whatsoever 
+                \cite{grundy_hosking,plimmer_apperley,oh_Stuerzlinger_danahy,
+                martin,kara_eramo_shimada}.  Much recent research has gone 
+                towards the development of tools to aid in this early stage 
+                of design and to augment the sketching process.  The 
+                Lifecycle Manager provides a means for storing such 
+                sketch-related materials, such as digital images of 
+                whiteboard sketches or other kinds of files, as annotated 
+                attachments to wiki pages.
+
+                Any tool that seeks to document the design process in its 
+                entirety, from product conception to product release, should 
+                aid in storing such images for later consideration and, 
+                ideally, aid in distributing such images for the sake of 
+                collaboration.  By doing so Lifecycle Manager can document 
+                much of the early design process or, at the very least, 
+                capture it at a particular stage of its development.  Since 
+                Lifecycle Manager does not restrict the user to a specific 
+                type of image or file and allows files to be stored as simple 
+                attachments, any means of capturing initial ideas is enabled 
+                and any variety of tools may be used.
+
+		\subsection{Evaluating Requirements}
+
+            Lifecycle Manager stores knowledge about software requirements 
+            as specified in the Common Functional Modeling Framework. Such 
+            knowledge includes specification of new requirements, changes 
+            to existing requirements, why additions or changes were made, 
+            when they were made, and by whom. Most projects are typically 
+            split into stages (these usually being: requirements, design,
+            implementation, testing, maintenance), each occurring within
+            defined timeframes. Therefore, temporal knowledge about changes
+            in software requirements will be correlated with stage
+            timelines, to determine in what stage requirements were changed.
+            These changes are recorded, relative to Milestone, in Lifecycle 
+            Manager and may be viewed in one of its stored reports.
+
+            The Lifecycle Manager also employs an information theoretic 
+            metric that analyzes frequencies of use of functional primitives 
+            and objects in the software requirements (see description of 
+            CFMF below). The relative significance of each software 
+            requirement is then computed and correlated to a functional 
+            primitive - software quality matrix stored in the system. Thus,  
+            the ways in which software requirements impact software quality 
+            can be determined quantitatively.
+
+            The framework itself is very specific yet easily grasped, and 
+            should be well understood before making extensive use of the 
+            Lifecycle Manager.  A detailed description of the framework 
+            follows.
+		
+	\section{Framework for Software Requirements}
+        \label{sec:cfmf}
+
+        Most software requirements are written in `natural language'
+        \cite{mich_et_al,neill_laplante} and thus prone to
+        ambiguities \cite{berry_et_al} and misinterpretations
+        \cite{gervasi_zowghi}. These problems have often been
+        addressed in research, and a range of requirements languages
+        have tried to solve these problems. Most of these attempts,
+        however, result in languages that are too close to the
+        implementation. Additionally, natural language and some more
+        formal requirements languages mix varying types and
+        abstractions of requirements. For example, functional with the
+        non-functional, detailed with the abstract, and use-cases with the
+        implementation details are often mixed in the same requirements
+        document and perhaps even the same statement. What is needed
+        is a requirements language that identifies one type of
+        software requirements in a consistent and meaningful grammar
+        and ruleset, one that eases understanding and interpretation.
+
+        We employ the Common Functional Modeling Framework
+        \cite{amoussou,amoussou_rohmer,eckroth}, which restricts
+        itself to the identification of functional
+        requirements. Research has shown that most functional
+        requirements are stated in terms of actions occurring in
+        relation to objects, typically in the form `action over
+        object' \cite{eckroth} For example, a functional requirement
+        may be `save user-data' or `display report.' In both cases,
+        the first term is the action and the second term is the
+        object. The framework codifies this consistency into a grammar
+        and ruleset, and exploits the benefits gained from such a
+        construction, such as ease of translation, computation,
+        tracing, and so on.
+	
+		\subsection{Syntax and Semantics}
+               
+                Functional requirements are written in the following
+                syntax: \{\texttt{action}\} \{\texttt{object}\}. Actions and
+                objects are one-word entities. In other words, if more
+                than one word is required, these words must be joined
+                with underscores, such as user\_data.
+		
+                The `actions' are described with functional
+                primitives, which are transitive verbs with a
+                particular property. This property is that the
+                functional primitive encapsulates the meaning of some
+                number of specified hyponyms. In this manner, a
+                functional primitive is a hypernym for its associated
+                hyponyms.
+
+                Listed in Table \ref{table:func_prims} are a series of
+                domain-independent functional primitives and their
+                related hyponyms. A software development-specific
+                collection of functional primitives and hyponyms is
+                proposed in Table \ref{table:software_func_prims}.
+
+                Objects, the second term in the functional
+                requirement, are project-specific. The CFMF suggests
+                reusing objects in separate functional requirements
+                wherever it is valid (such as, \texttt{obtain
+                  user\_data} and \texttt{save user\_data}).
+
+				\begin{figure}[ht]
+                \begin{center}
+%                  \begin{table}
+                    \begin{tabular}{l|l}
+                      Functional Primitive & Hyponyms\\
+                      \hline\\
+                      connect     & join, link, couple, combine\\
+                      contain     & store, hold, comprise, include\\
+                      control     & verify, check, inspect, test, compare\\
+                      correct     & rectify, remedy, amend, redress\\
+                      dissipate   & lose, disappear, dissolve, vanish\\
+                      enable      & permit, authorize, allow\\
+                      guide       & conduct, direct, channel, lead, pilot\\
+                      increase    & boost, heighten, amplify, intensify\\
+                      limit       & restrain, restrict, reduce, interrupt\\
+                      locate      & situate, detect, discover, place\\
+                      maintain    & regulate, preserve, sustain, keep\\
+                      make        & produce, generate, perform, create\\
+                      measure     & quantify, assess, evaluate, calculate\\
+                      prevent     & avoid, block, hinder\\
+                      protect     & secure, defend\\
+                      start       & begin, initiate, appear, establish\\
+                      support     & carry, bear\\
+                      suppress    & stop, reduce, eliminate, destroy\\
+                      transform   & convert, change, alter\\
+                      transport   & transmit, deliver, convey, move\\
+                      & transfer, supply, furnish
+                    \end{tabular}
+                    \caption{Functional primitives and their hyponyms.}
+                    \label{table:func_prims}
+%                  \end{table}
+                \end{center}
+				\end{figure}
+
+				\begin{figure}[ht]
+                \begin{center}
+%                  \begin{table}
+                    \begin{tabular}{l|l}
+                      Functional Primitive & Hyponyms\\
+                      \hline\\
+                      copy        & duplicate, image, replicate\\
+                      disconnect  & detach, separate\\
+                      list        & enumerate, itemize\\
+                      obtain      & acquire, gather, open, receive, scan, select, upload\\
+                      print       & export, hardcopy\\
+                      save        & download, export, store\\
+                      search      & filter, find, locate, lookup, scan\\
+                      send        & broadcast, emit, propagate\\
+                      stop        & exit, leave, quit, reboot, shutdown, teardown\\
+                      tag         & categorize, flag, mark\\
+                      trace       & log, record, remember\\
+                      untag       & uncategorize, unflag, unmark\\
+                      view        & browse, draw, map, paint, play, show, visualize
+                    \end{tabular}
+                    \caption{Proposed software development-specific functional primitives and their hyponyms.}
+                    \label{table:software_func_prims}
+%                  \end{table}
+                \end{center}
+				\end{figure}
+
+                Functional requirements are grouped into
+                \textit{components}, an identical concept to
+                \textit{modules}. The same requirement may appear in
+                differing components, but a requirement only appears
+                once in a single component. Thus, in order to uniquely
+                identify a requirement, the component, functional
+                primitive, and object must be specified.
+
+                The syntax lends itself to easy mention, or reference,
+                of requirements in other, text-based design
+                artifacts. This referencing scheme is not some
+                abstract labeling system like ``Requirement 1.A.i''
+                but with the requirement itself. To do so, the user
+                must provide the component, functional primitive and
+                object in one of two forms: either surrounded by angle
+                brackets or preceded by the word ``requirement''
+                followed by a colon and the component, functional
+                primitive and object separated by dashes.  For
+                example,
+
+            \begin{itemize}
+                \item \begin{verbatim}<component fp object>\end{verbatim}
+                \item \begin{verbatim}requirement:component-fp-object\end{verbatim}
+            \end{itemize}
+
+            If any of the three elements is more than one word long,
+            then separate the words of the element with underscores
+            `\_':
+
+            \begin{itemize}
+                \item \begin{verbatim}<red_component fp object>\end{verbatim}
+                \item \begin{verbatim}requirement:component-fp-blue_object\end{verbatim}
+            \end{itemize}
+
+            Lifecycle Manager will find references to requirements
+            written in this syntax and store the references for
+            reports and metrics.
+
+    \section{Metrics}
+    \label{sec:metrics}
+
+    As noted above, Lifecycle Manager stores all information relating 
+    requirements to tickets and wiki pages.  As such, it is able to provide a 
+    number of reports reflecting various calculated metrics.  The 
+    relationships between requirements and tickets extends to relating 
+    requirements to other objects indirectly via tickets, for instance, 
+    milestones.  This stored information also allows other developers to 
+    create their own metrics should the need arise.  The current metrics 
+    calculated in Lifecycle Manager provide:
+
+            \begin{itemize}
+                \item The number of times a requirement has been cited, 
+                    either in tickets or in wiki pages.  A report is 
+                    provided giving all requirements cited organized from 
+                    most to least cited.
+                \item The number of times a requirement has been cited in a 
+                    task, or an enhancement or a defect (all types of 
+                    tickets).  A report is provided for each, with 
+                    requirements listed from most to least cited.
+                \item Which requirements have seen the most changes.
+                \item Which milestones have seen the most changes in 
+                    requirements.
+            \end{itemize}
+
+    Other, simpler reports provide a basic view of some of the information 
+    contained in Lifecycle Manager:
+
+            \begin{itemize}
+                \item A view of requirements with associated tickets.
+                \item A view of which requirements changed over the course 
+                    of a milestone.
+                \item A view of which requirements are related to milestones 
+                    (indirectly, via the relationship of requirements to 
+                    tickets and tickets to milestones).
+                \item A list of disabled requirements.
+                \item Associations between requirements and wiki pages.
+            \end{itemize}
+
+            Another useful metric is the entropy metric, which
+            calculates the significance of individual requirements and
+            whole components to the software product \cite{eckroth}.
+
+		\subsection{Entropy Metric}
+
+                Requirements written in the CFMF syntax have a finite
+                number of possible functional primitives and
+                objects. It is thus possible to devise metrics that
+                may provide insights about a requirements document.
+
+                One such metric that has often been used in computer
+                science as a metric of \emph{significance} is
+                information entropy, from Information Theory initially
+                developed by Claude Shannon \cite{shannon}. The
+                initial conception of information entropy described
+                how data is sent through a channel, such as a phone
+                wire. The rate of bits per second that must be
+                transmitted over the wire in order to effectively
+                communicate some particular kind of information
+                depends on the nature of that information. Information
+                which was more random required more bits per second,
+                since there is more unpredictability. In this same
+                fashion, English language may be compressed (shortened
+                for efficient storage or transmission) by taking into
+                account the fact that `e' is the most common
+                letter. If all letters were equally common in typical
+                English text, there would be little chance of
+                compressing, or shortening a string of sentences. The
+                degree of randomness, or unpredictability, in
+                information was called information entropy.
+
+                In its further applications, information entropy
+                became known as a measure of the significance of
+                particular symbols in a specific type of
+                information. Again, if our information is composed of
+                English sentences, than our symbols are letters and
+                the methods of information theory would tell us how
+                significant each individual letter is in context of a
+                typical English sentence. Because `z' is much less
+                common than `e', `z' is more significant. That is to
+                say, in a typical English sentence, `z' most likely
+                will not appear, so if it does appear, that appearance
+                is significant. However, if a symbol \emph{never}
+                appears (\emph{will not ever, no matter what};
+                consider a symbol \emph{not} in our alphabet), then it
+                has zero significance.
+
+                Our application applies this logic to the requirements
+                document, as developed by Eckroth and Amoussou
+                \cite{eckroth}. If the requirements document is seen
+                as information, and the functional requirements (made
+                up of functional primitives and objects) as symbols,
+                then we can measure the \emph{significance} of a
+                functional requirement. It is in this manner that we
+                prioritize functional requirements and discover which
+                functional requirements have the most impact on our
+                system.
+
+                The mathematical definition follows. Let $C$ be the
+                set of components, $F$ be the set of functional
+                primitives, $B$ be the set of objects, $R =
+                \{(c,f,b)|c \in C, f \in F, b \in B\}$ be the set of
+                requirements with each requirement represented as
+                triple with component, functional primitive, and
+                object.
+
+                The measure of significance, or information content,
+                or information entropy of a requirement $r = (c,f,b)$
+                is the sum of the information content of the
+                functional primitive $f$ and the object $b$:
+                \begin{equation}
+                  \label{eq:entropy_of_req}
+                  I(r = (c,f,b)) := I(f) + I(b)
+                \end{equation}
+
+                The information content of a functional primitive,
+                $I(f)$ follow's Shannon's formula:
+                \begin{equation}
+                  \label{eq:entropy_of_func_prim}
+                  I(f) = - \sum_{b \in B} P_f(b) \log_2 P_f(b)
+                \end{equation}
+                This equation states that the information content of
+                $f$ depends on the frequency of $f$'s occurrence with
+                each object $b \in B$. We define $P_f(b)$ as:
+                \begin{equation}
+                  \label{eq:prob_of_func_prim}
+                  P_f(b) = \frac{|\{r \in R|r = (c',f,b), c' \in C\}|}
+                  {|\{r \in R|r = (c',f',b), c' \in C, f' \in F\}|}
+                \end{equation}
+                This equation can be read as: `the number of pairings
+                of $f$ and $b$ in any component, divided by the number
+                of requirements involving $b$.' In other words,
+                $P_f(b)$ determines the frequency of the pairing of
+                $f$ and $b$. Or, in Shannon's terms, the pairing of
+                $f$ and $b$ in a requirement is an `event,' and the
+                likelihood of that event is $P_f(b)$.
+
+                As an example of results from this metric, see
+                Appendix \ref{app:entropy}, where the metric was
+                applied to our own set of requirements for Lifecycle
+                Manager, as specified in the Common Functional
+                Modeling Framework. For more details about the
+                mathematics or use of this metric, see the work of
+                Eckroth and Amoussou \cite{eckroth}.
+		
+	\section{Discussion}
+        \label{sec:discussion}
+	
+        \subsection{Previous Approaches to Requirements Tracking}
+
+            Requirements traceability, the ability to track the changes in 
+            a requirement over the course of a product lifecycle, has a 
+            substantial body of research in the software development field.  
+            There have been previous attempts to codify it, by one means or 
+            another, but none have gained wide-spread or substantial 
+            acceptance  \cite{ameche_ketabchi,ramesh_stubbs}.  Few 
+            approaches define specifically what or how much information 
+            should be recorded.  To the best of our knowledge, none have 
+            offered a requirements tracking system fully integrated into a 
+            commonly used ticket-tracking system \cite{ameche_ketabchi} and 
+            none offers a framework for requirements specification as 
+            exacting as the CFMF.
+
+            The requirements tracking feature provided in Lifecycle Manager, 
+            however, is less formal in the sense that it does not offer a 
+            full or detailed framework for requirements traceability as is 
+            provided elsewhere.  As an example, Nicole Ameche and Ehsan 
+            Ketabchi have outlined a framework for requirements traceability 
+            that is much more comprehensive.  They have included in their 
+            framework a number of components that are very useful for 
+            requirements traceability, including a requirement adaptability 
+            component (used to keep requirements adaptable to potential 
+            future changes), a design rationale component (used for 
+            documenting the reasons for the choice of design--or a choice of 
+            change in design), an incremental formalization component (which 
+            allows for the gradual shift from informal design, typically in 
+            the form of sketches and notes, to a more formal notation), and 
+            a contribution structure component (used to track which 
+            stakeholders or developers contributed to which design artifact) 
+            \cite{ameche_ketabchi}.  Although Lifecycle Manager does not 
+            directly support such frameworks, it does offer the kind of 
+            tools that can aid in supporting such a framework.  It provides 
+            the tools necessary to track incremental formalization, from the 
+            beginning stages of design (typically sketches, which may be 
+            captured in the form of digital imagery and added as attachments 
+            to Wiki pages) to implementation.  Thus, it can document the 
+            various stages towards formalization.  Requirements 
+            adaptability, design rationale and contribution structure may 
+            all be provided for through documentation and design policy.  
+            Thus, Lifecycle Manager can be used in conjunction with, and as 
+            a documenter to, a more complex framework.
+
+            There are also some problems associated with setting down a 
+            rigid set of requirements right at the outset of a project.  
+            Requirements that are specified early in the lifecycle have a 
+            tendency to produce a large bulk of unwanted functionality.  
+            Also, developers will, ironically, tend to define most 
+            requirements in the later stages of implementation, closer to 
+            the time of product release \cite{ameche_ketabchi}.  Hence, 
+            there are reasons not to overuse or misuse this feature.
+
+            Lifecycle Manager only provides the most fundamental tools and 
+            metrics for tracking requirements within a standard 
+            ticket-tracking system.  It provides nothing beyond this except 
+            the possibility to create more, which is the intent.  Since we are 
+            unaware of any other commonly accepted and used ticket-tracking 
+            system that does so, we felt that creating a firm foundation for 
+            future development was achievement enough. The development of 
+            Lifecycle Manager does, however, suggest possibilities for the 
+            next few steps of development, some of which are outlined below.
+
+		\subsection{A Missing Piece of Requirements Tracking}
+
+                Lifecycle Manager does not correlate requirements to
+                source code. Changes and additions to the software
+                project's body of code \emph{is} tracked via one of
+                many version control suites, such as Subversion, but
+                neither code nor revision messages are searched for
+                requirements references.
+
+                Although tracing requirements through code promises
+                enormous benefits for the design process
+                \cite{watkins_neal}, realizing the dream is no simple
+                matter. Tracing through code is exceedingly difficult
+                to automate \cite{heindl_biffl}, with most approaches
+                relying on special programming language constructs or
+                strict documentation policies
+                \cite{ramesh_jarke}. Lifecycle Manager is a
+                programming language-neutral development platform, so
+                our platform may not rely on special programming
+                language syntax.
+
+                Only revision messages may be used for tracing
+                requirements with respect to source code. When code is
+                changed and committed to the repository, the revision
+                message could include references to requirements, in the
+                same syntax detailed above. Lifecycle Manager would then be 
+                able to correlate the code revisions with requirements,
+                and utilize this information in reports and metrics to
+                indicate how requirements affect code and
+                vice-versa. At the present time, however, this feature
+                is unavailable.
+                
+                This is only the most obvious of drawbacks to the current 
+                system.  Since the system, as it stands, is only a bare-
+                bones beginning to a requirements tracking system this 
+                should, perhaps, be expected.  It is merely the first of a 
+                number of key points of interest for potential future 
+                development.
+
+    \section{Future Directions}
+    \label{sec:future}
+
+    Our time developing the LCM was short, only one standard semester.
+    As such, there were several additions to the project that we would
+    like to see implemented by future developers working on the
+    project.  First a framework for documenting use cases would be
+    very beneficial.  This would be immensely helpful when deciding
+    how to test the implementation of functional requirements.  There
+    could also be an API associated with the project.  Such an API
+    could perhaps be web driven for remote project administration. To
+    streamline and integrate the development process, it has been
+    purposed that plug-ins be developed for some popular integrated
+    development environments such as
+    Eclipse\footnote{\url{http://www.eclipse.org}}, Microsoft Visual
+    Studio\footnote{\url{http://msdn.microsoft.com/vstudio}} and
+    KDevelop\footnote{\url{http://www.kdevelop.org}}.  Lastly,
+    benchmarks could be integrated into the system to provide an
+    organic method of software inspection.
+
+        \subsection{Benchmarks}
+
+            Benchmarks are commonly defined as a standard or point of 
+            reference against which things may be compared or assessed, as 
+            in a benchmark case.  In software development it is typically 
+            assumed to be a problem designed to evaluate the performance of 
+            a computer system.  For example, Xstones is a graphics 
+            benchmark.  By providing basic information to the user about 
+            requirements a set of benchmarks may be established regarding 
+            their use.  Such benchmarks could be used by future developers 
+            to compare against their own development process.
+
+            As an hypothetical example, let us assume that we have found, 
+            through consistent use of Lifecycle Manager, that 5 changes or 
+            less to a requirement would typically indicates that it would 
+            not undergo a major revision, whereas more than 5 changes did.  
+            In addition, we found that 6, 7 or 8 changes were rare in our 
+            project and 10, or, more frequently, 20 were more common than 
+            any other number of changes above 5.  This would seem to 
+            indicate a pattern in which more than five changes to a 
+            requirement typically led to a landslide of changes.  Thus, we 
+            could establish 5 changes as a benchmark for future developers 
+            to note, and 6 or more can be used as a flag to developers to 
+            re-asses the requirement immediately.
+
+            A project manager could use such benchmarks to compare with the 
+            information in their own project.  If, over time, such 
+            benchmarks could be determined then they could be 
+            programmatically added to Lifecycle Manager.
+
+            We would like to suggest, as a minimal first step, the 
+            establishment of at least a couple such benchmarks for future 
+            developers to use.  The first is the one noted above in our 
+            example, a changes to requirements threshold which can be used 
+            to note at what point the number of changes to a requirement 
+            begins to conflate beyond normal.  As a second benchmark, we 
+            would like to suggest the calculation of a tickets-to-requirements ratio for each requirement in a project at the end 
+            of a project in order to determine abnormal ratios.  In other 
+            words, a beginning point where requirements have a tendency to 
+            far exceed others in the number of tickets relating to them.  
+            This could be used to establish another threshold as a warning 
+            to developers and managers alike, a threshold that should not 
+            be exceeded without a serious review of the requirement 
+            (possibly breaking it down into more fundamental, constituent 
+            parts or maybe rewriting it completely).
+
+            These are but two examples of possible benchmarks to be 
+            employed in the development process.  Others are possible as 
+            well.  Since Lifecycle Manager is an open source project the 
+            limits are only those of the developer's imagination and skill.
+	
+	\section{Conclusion}
+        \label{sec:conclusion}
+
+        What Lifecycle Manager offers a software development team is
+        the ability to store a wide range of design artifacts and
+        record all changes subsequently made to them. In addition, a
+        fundamental feature of software design is the documentation of
+        software requirements. Lifecycle Manager uses the Common
+        Functional Modeling Framework to record functional
+        requirements in a unique syntax and semantics that lends
+        itself to quantitative analysis and easy referencing in other
+        design artifacts. Reports and metrics that utilize these
+        essential features of the platform give project managers even
+        more information about a design process, enabling them to
+        better plan and predict active and future projects.
+
+        Lifecycle Manager is an open-source project and available for
+        a wide variety of systems, due to its use of the open-source
+        software Trac\footnote{\url{http://trac.edgewall.org}} as its
+        foundation. More information about Lifecycle Manager and a
+        demo of its use in this very project's development can be
+        found at:
+        \url{http://www.insearchofartifice.com/lifecyclemanager}
+	
+	\section{Acknowledgments}
+
+        Lifecycle Manager was developed by Andrew De Ponte, Joshua
+        Eckroth, Jon Koriagin, Quinn Peters, and Louis Omgba, with the
+        assistance of Guy-Alain Amoussou.
+
+	\bibliography{research_paper}
+
+
+        \begin{appendices}
+        \section{Lifecycle Manager Software Requirements}
+        \label{app:reqs}
+        
+        %%% NOTE: THE FOLLOWING will stop hyperlinking requirements, and hide test-case information
+
+        \renewcommand\req[3]{\texttt{<#1 #2 #3>}}
+
+        \renewcommand\nreq[5]{\texttt{<#1 #2 #3>}\\#4}
+
+
+
+        \subsection{Functional Requirements}
+
+       
+\subsubsection{Functional Primitive / Hyponym Dictionary and
+          Objects (cfmf)}
+        \begin{itemize}
+      \item \nreq{cfmf}{assign}{hyponym}{Provide functionality to
+          correlate functional primitives with hyponyms, forming the
+          functional primitive-side of the CFMF dictionary.}{}\item
+        \nreq{cfmf}{edit}{dictionary}{Provide an interface for \req{cfmf}
+          {make}{functional\_primitive}, \req{cfmf}{make}{hyponym}, \req{cfmf}
+          {assign}{hyponym}, \req{cfmf}{make}{object}.}{}\item
+        \nreq{cfmf}{edit}{object}{Provide functionality to edit an
+          object (an object's description).}{}\item
+        \nreq{cfmf}{link}{component}{Parse links of the form
+          `component:blah', linking to \req{cfmf}{view}{component}.}{}\item
+        \nreq{cfmf}{link}{functional\_primitive}{Parse links of the
+          form fp:blah linking to \req{cfmf}{view}{functional\_primitive}.}{}\item
+        \nreq{cfmf}{link}{object}{Parse links of the form
+          `object:blah', linking to \req{cfmf}{view}{object}.}{}\item
+        \nreq{cfmf}{make}{functional\_primitive}{Define new functional
+          primitives (but not yet associated to hyponyms).}{}\item
+        \nreq{cfmf}{make}{hyponym}{Provide functionality to create a
+z          hyponym.}{}\item \nreq{cfmf}{make}{object}{Provide
+          functionality to create an object.}{}\item
+        \nreq{cfmf}{view}{component}{View a component and all
+          associated functional primitives and objects, as well as
+          (perhaps) some metrics applied to it or these
+          associations.}{}\item \nreq{cfmf}{view}{dictionary}{Obtain a
+          report of all functional primitives and related hyponyms,
+          and objects in the CFMF dictionary.}{}\item
+        \nreq{cfmf}{view}{functional\_primitive}{View a functional
+          primitive and all associated components \& objects, as well
+          as (perhaps) some metrics applied to it or these
+          associations.}{}\item \nreq{cfmf}{view}{object}{View an
+          object and all associated components \& functional
+          primitives, as well as (perhaps) some metrics applied to it
+          or these associations.}{}
+        \end{itemize}
+
+        
+\subsubsection{Changesets (changeset\_system)}
+        \begin{itemize}
+\item
+        \nreq{changeset\_system}{list}{changeset}{List all changesets
+          within a certain time period.}{}\item
+        \nreq{changeset\_system}{search}{changeset}{Search through
+          changeset logs.}{}\item
+        \nreq{changeset\_system}{view}{changeset}{View a changeset,
+          including the log and diffs.}{}
+\end{itemize}
+
+\subsubsection{Components (component\_system)}
+\begin{itemize}
+\item
+        \nreq{component\_system}{make}{component}{Define a new
+          component.}{}
+
+\end{itemize}
+
+\subsubsection{Milestones (milestone\_system)}
+\begin{itemize}\item
+        \nreq{milestone\_system}{complete}{milestone}{Mark the
+          milestone as completed.}{}\item
+        \nreq{milestone\_system}{edit}{milestone}{Alter a milestone's
+          name or due date.}{}\item
+        \nreq{milestone\_system}{graph}{milestone}{Produce a graph
+          showing percent complete of tickets associated with a
+          milestone.}{}\item
+        \nreq{milestone\_system}{make}{milestone}{Define a new
+          milestone, including its due date.}{}
+\end{itemize}
+
+\subsubsection{Markup Parser (requirements\_markup)}
+\begin{itemize}
+\item
+        \nreq{requirements\_markup}{search}{changeset}{Find all
+          requirements references found in any new changeset
+          log.}{}\item
+        \nreq{requirements\_markup}{search}{ticket}{Find all
+          requirements references found in new or modified
+          tickets.}{}\item
+        \nreq{requirements\_markup}{search}{wiki}{Find all
+          requirements references found in new or modified wiki
+          pages.}{}
+\end{itemize}
+
+\subsubsection{Metrics (requirements\_metrics)}
+\begin{itemize}
+\item
+        \nreq{requirements\_metrics}{measure}{requirement\_entropy\_metric}{Calculate
+          the requirements entropy metric.}{}
+\end{itemize}
+
+\subsubsection{Requirements (requirements\_plugin)}
+\begin{itemize}
+\item
+        \nreq{requirements\_plugin}{disable}{requirement}{Disable a
+          requirement that is in an enabled state.}{}\item
+        \nreq{requirements\_plugin}{enable}{requirement}{Enable a
+          requirement that is in a disabled state.}{}\item
+        \nreq{requirements\_plugin}{make}{requirement}{Provide
+          functionality to create a requirement.}{}\item
+        \nreq{requirements\_plugin}{transform}{requirement}{Provide
+          functionality to modify a requirement.}{}\item
+        \nreq{requirements\_plugin}{validate}{requirement}{Validate
+          current set of requirements.}{}\item
+        \nreq{requirements\_plugin}{version}{requirement}{Record all
+          requirement changes.}{}
+\end{itemize}
+
+\subsubsection{Requirements Views (requirements\_views)}
+\begin{itemize}
+\item
+        \nreq{requirements\_views}{graph}{overall\_project}{Allow the
+          user to see a different view of the project as a larger
+          entity with subentities with graphical and descriptive
+          representation.  The point is to allow the user to
+          understand the project as a whole more intuitively.}{}\item
+        \nreq{requirements\_views}{obtain}{disabled\_requirements\_by\_component\_report}{Obtain
+          a report containing a listing of the disabled requirements
+          by component}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_change\_over\_time\_graph}{Obtain
+          a graph representing a requirements change over time}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_changeset\_over\_time\_graph}{Obtain
+          a graph representing a requirements changesets over
+          time}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_changeset\_report}{Obtain
+          a report containing a listing of the requirements and their
+          associated changesets}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_component\_report}{Obtain
+          a report containing a listing of the requirements by
+          component}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_fp\_report}{Obtain
+          a report containing a listing of the requirements broken
+          down by their functional primitives}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_milestone\_report}{Obtain
+          a report containing a listing of requirements broken down by
+          milestone relationship}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_most\_least\_cited\_report}{Obtain
+          a report showing a listing of which requirements are present
+          in tickets and wiki pages and list them from most to least
+          cited along with the associated metric}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_nonexistant\_report}{Report
+          requirements which have been referenced but don't yet
+          exist}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_object\_report}{Obtain
+          a report containing a listing of the requirements broken
+          down by their objects}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_ticket\_correlation}{Find
+          and record references to requirements in tickets.}{}\item
+        \nreq{requirements\_views}{obtain}{requirement\_wiki\_correlation}{Find
+          and record references to requirements in wiki pages.}{}\item
+        \nreq{requirements\_views}{view}{requirement}{Show a single
+          requirement, with its change history and some meaningful
+          graphs.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_entropy\_metric}{View
+          the results from the requirements entropy metric.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_frequency\_changes}{Show
+          the report of frequency of changes of requirements.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_frequency\_referenced}{Show
+          a report listing requirements and their associated
+          references either in increasing or decreasing order of
+          frequency of references.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_frequency\_ticket\_type}{Show
+          a report listing requirements and their associated tickets
+          of a selected type (defect, task, enhancement, etc.) either
+          in increasing or decreasing order of frequency of the
+          specified ticket type associations.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_wiki\_correlation}{Show
+          a report of the correlations between requirements and wiki
+          pages.}{}\item
+        \nreq{requirements\_views}{view}{requirement\_wiki\_over\_time}{View
+          a graph representing referencing requirements via tickets
+          over time.}{}
+\end{itemize}
+
+ \subsubsection{Tickets (ticket\_system)}
+\begin{itemize}
+\item
+        \nreq{ticket\_system}{assign}{component}{Assign a ticket to a
+          specific component.}{}\item
+        \nreq{ticket\_system}{assign}{milestone}{Assign a ticket to a
+          specific milestone.}{}\item
+        \nreq{ticket\_system}{assign}{severity}{Classify a ticket's
+          severity (importance).}{}\item
+        \nreq{ticket\_system}{assign}{type}{Indicate a ticket's type
+          (defect, enhancement, etc).}{}\item
+        \nreq{ticket\_system}{assign}{user}{Assign a user to take
+          ownership of a ticket.}{}\item
+        \nreq{ticket\_system}{assign}{version}{Correlate a ticket with
+          a specific version of the software.}{}\item
+        \nreq{ticket\_system}{comment}{ticket}{Add a comment to a
+          ticket.}{}\item \nreq{ticket\_system}{filter}{ticket}{Filter
+          which tickets are shown in reports.}{}\item
+        \nreq{ticket\_system}{list}{ticket}{List or report a set of
+          tickets.}{}\item \nreq{ticket\_system}{make}{ticket}{Define
+          a new ticket.}{}\item
+        \nreq{ticket\_system}{search}{ticket}{Search for a particular
+          or set of tickets based on a range of criteria.}{}\item
+        \nreq{ticket\_system}{transform}{ticket}{Make a modification
+          to a ticket, such as its description or summary.}{}\item
+        \nreq{ticket\_system}{version}{ticket}{Track all changes to a
+          ticket.}{}\item \nreq{ticket\_system}{view}{ticket}{View a
+          single ticket.}{}
+\end{itemize}
+
+\subsubsection{Wiki (wiki\_system)}
+\begin{itemize}
+\item
+        \nreq{wiki\_system}{edit}{wiki}{Modify the content of a wiki
+          page.}{}\item \nreq{wiki\_system}{search}{wiki}{Search wiki
+          pages for specific phrases.}{}\item
+        \nreq{wiki\_system}{version}{wiki}{Track all changes to a wiki
+          page.}{}\item \nreq{wiki\_system}{view}{wiki}{View a wiki
+          page.}{}
+\end{itemize}
+
+        \section{Applied Entropy Metric (Partial)}
+        \label{app:entropy}
+
+        \begin{tabular}{l|l}
+        \textbf{Requirement} & \textbf{Entropy Value} \\
+        \hline \\
+        \req{requirements\_views}{view}{requirement} & 9.313 \\
+        \req{ticket\_system}{view}{ticket} & 8.848 \\
+        \req{wiki\_system}{view}{wiki} & 7.945 \\
+        \req{cfmf}{view}{object} & 7.792 \\
+        \req{cfmf}{view}{component} & 7.792 \\
+        \req{changeset\_system}{view}{changeset} & 7.445 \\
+        \req{cfmf}{view}{functional\_primitive} & 7.292 \\
+        \req{requirements\_views}{view}{requirement\_wiki\_correlation} & 7.056 \\
+        \req{cfmf}{view}{dictionary} & 6.888 \\
+        \req{requirements\_views}{view}{requirement\_frequency\_ticket\_type} & 6.853 \\
+        \req{requirements\_views}{view}{requirement\_frequency\_referenced} & 6.853 \\
+        \req{requirements\_views}{view}{requirement\_frequency\_changes} & 6.853
+        \end{tabular}
+
+        \vskip 0.5in
+
+        \begin{tabular}{l|l}
+        \textbf{Component} & \textbf{Relative Entropy Value} \\
+        \hline \\
+        cfmf & 20.0\% \\
+        changeset\_system & 4.7\% \\
+        component\_system & 1.7\% \\
+        milestone\_system & 4.7\% \\
+        requirements\_markup & 3.4\% \\
+        requirements\_metrics & 1.7\% \\
+        requirements\_plugin & 13.3\% \\
+        requirements\_views & 28.2\% \\
+        ticket\_system & 16.4\% \\
+        wiki\_system & 5.8\%
+        \end{tabular}
+
+        \end{appendices}
+	
+\end{document}

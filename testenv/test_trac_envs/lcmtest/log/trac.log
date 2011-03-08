@@ -1,0 +1,10 @@
+2008-04-14 16:20:14,196 Trac[loader] DEBUG: Loading egg plugin NewrequirementAjaxModule from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,219 Trac[loader] DEBUG: Loading egg plugin RequirementSystem from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,220 Trac[loader] DEBUG: Loading egg plugin CacheComponent from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,221 Trac[loader] DEBUG: Loading egg plugin RequirementGraphComponent from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,644 Trac[loader] DEBUG: Loading egg plugin RequirementComponent from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,645 Trac[loader] DEBUG: Loading egg plugin NewrequirementModule from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,646 Trac[loader] DEBUG: Loading egg plugin ViewModule from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,648 Trac[loader] DEBUG: Loading egg plugin RequirementModule from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,649 Trac[loader] DEBUG: Loading egg plugin ReportModule from /Users/cyphactor/Documents/programming/open_source_sandbox/lifecyclemanager/testenv/test_trac_envs/lcmtest/plugins/TracRequirements-0.1-py2.5.egg
+2008-04-14 16:20:14,762 Trac[api] DEBUG: Updating wiki page index

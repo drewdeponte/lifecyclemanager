@@ -1,0 +1,313 @@
+\documentclass{article}
+\usepackage{lm-latex}
+\usepackage{epic,eepic,xcolor,rotating}
+
+\title{Metrics}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\input{project_abstract}
+
+\section{Representation schemata}
+
+Explain reasons for vector, and what it really is represented.
+
+\subsection{Requirement vectors}
+
+Requirements are made up of several components. For any functional
+requirement at some time $t$, we define the vector $\vec{r}_t$ as
+\begin{align}
+\label{eq:def_of_rt}
+\vec{r}_t &=& <\comp,\fp,\obj,\status,\desc,\user,\ctime>,\\
+\text{where} && \begin{cases}
+  \comp     & \text{is the component}\\
+  \fp       & \text{is the functional primitive}\\
+  \obj      & \text{is the object}\\
+  \status   & \text{is `enabled' or `disabled'}\\
+  \desc     & \text{is the description}\\
+  \user     & \text{is the user responsible for the current state}\\
+  \ctime    & \text{is the time of the last change}
+  \end{cases} \notag
+\end{align}
+The component $\desc$ is underlined because it may contain requirement
+citations.
+
+Because $\vec{r}_t$ shows the requirement as a snapshot in time, we
+can represent a requirement's evolution, or sequence of states, as
+\begin{equation}
+\label{eq:def_of_r}
+\seq{r} = (\vec{r}_{t_0}, \vec{r}_{t_1}, \dots).
+\end{equation}
+The only redundancy in $\seq{r}$ is in the $\comp$, $\fp$, and $\obj$
+components, as these three fields do not change. Functional requirements
+are uniquely identified by these first three fields in $\vec{r}_t$.
+
+
+\subsection{Component, functional primitive, and object dictionaries}
+
+
+\subsection{Predicates}
+\label{sec:predicates}
+
+In order to restrict metrics to a certain subset of requirements of
+interest, we utilize a predicate function that discriminates among all
+states of all known requirements. For example, such a predicate
+function may select the most recent states of requirements that were
+created by a specific user, or requirements which have been cited in
+defect tickets. Predicate functions are indicated by the symbol
+$\pred{p}$. Again, predicates allow the same metric to be applied in a
+range of contexts by selectively including specific sets of
+requirements.
+
+
+\subsection{Requirement matrix}
+
+Most of the metrics that follow, however, do not operate on all of the
+information stored in a $\vec{r}_t$ vector. Only the $\fp$ and $\obj$
+fields are considered for the moment. We construct a matrix of
+functional primitive-object pairings
+\begin{equation}
+\mat{R}_t[\pred{p}] = \begin{tabular}{c|ccc}
+  & $\obj_1$ & $\obj_2$ & $\cdots$\\
+  \hline
+  $\fp_1$ & $c_{1,1}$ & $c_{1,2}$ & $\cdots$ \\
+  $\fp_2$ & $c_{2,1}$ & $c_{2,2}$ & $\cdots$ \\
+  $\vdots$ & $\vdots$ & $\vdots$ & $\ddots$
+\end{tabular}
+\end{equation}
+where $c_{i,j}$ is the count of requirements $\seq{r}$ with property
+$\pred{p}$ whose vectors $\vec{r}_t$ have second and third components
+$\fp$ and $\obj$, respectively. Note that $\mat{R}_t$ will likely not
+be square, since there's no reason to believe that, in general, a
+requirements specification will employ sets of functional
+primitives and objects of the same size.
+
+The matrix $\mat{R}_t$ represents a snapshot at time $t$. The counts
+of requirements with property $\pred{p}$ will certainly change over
+time as requirements are created and disabled. Such a matrix
+representation allows us to easily model these changes.
+
+In the subsequent metrics, the following notations will be used in
+reference to the matrix $\mat{R}_t[\pred{p}]$ for some known
+$\pred{p}$ and time $t$. Let $M_f$ be the row-sum of
+$\mat{R}_t[\pred{p}]$ of the row representing the functional primitive
+$f$; $M_b$ be the column-sum of $\mat{R}_t[\pred{p}]$ of the column
+representing the object $b$; and $M_{f,b}$ be the value of
+$\mat{R}_t[\pred{p}]$ at row $f$, column $b$.
+
+With the above notations, it follows that the total count of
+requirements with property $\pred{p}$ at time $t$ is equivalently
+$\sum_{f \in F} M_f$, $\sum_{b \in B} M_b$, and $\sum_{f \in F}
+\sum_{b \in B} M_{f,b}$. We denote this count as simply $M$.
+
+
+\subsection{Other design artifacts}
+
+Many artifacts are created during the design process. Besides
+requirements, Lifecycle Manager stores wiki content, tickets (defects,
+enhancements, tasks, etc.), and source code, with support for
+additional artifacts via plugins. The essential property Lifecycle
+Manager needs in a design artifact is a method of citing
+requirements. In wiki content, requirements may be cited anywhere. In
+a ticket, requirements may be cited in the description or comment
+field. Source code and repository commit messages may also cite
+requirements. If a design artifact (such as an image) is unable to
+cite requirements in plain text, Lifecycle Manager is unable to
+consider any relations between the artifact and requirements.
+
+In order to limit a metric of interest to requirements that have been
+cited in some particular category of design artifacts, an appropriate
+predicate may be used (see Section \ref{sec:predicates}).
+
+
+\section{Information theory overview}
+
+Besides counting metrics, which are simply summations and percents of
+wholes, Lifecycle Manager uses information theoretical metrics in
+order to gain more insight than counting metrics provide. Such insight
+relates to the significance of certain phenomenon, in terms of how
+much information is conveyed.
+
+\subsection{Information entropy}
+
+Information theory was developed as a means of measuring the amount of
+information carried in a physical signal or channel. Shannon
+\cite{shannon} quantified the amount of ``surprise'' from a received
+symbol in a stream of symbols. If the reception of a symbol is very
+unlikely, i.e. surprising, then it carries a high amount of
+information. The total information content in a channel is its
+``information entropy'' (due to the mathematical similarities with
+Boltzmann's equations and thermodynamic entropy \cite{chat_steph}).
+
+As an example, consider the symbols of the Latin alphabet and a
+transmission of an English sentence. Each letter has a certain
+probability of occurring, derived from the frequencies in a wide
+collection of English texts. The letter `e' is common, while `x' is
+uncommon. Therefore, when receiving the transmission, i.e. the
+sentence, one letter at a time, there will be little surprise if `e'
+is transmitted and much surprise if `x' is transmitted. So `x' carries
+more information than `e'. The entropy of the transmission is the
+total information carried by the transmission of each individual
+symbol. A transmission with many `e's will have less information
+entropy than a transmission with many `x's, since each `x' carries
+more information than each `e' \cite{shannon}.
+
+Shannon \cite{shannon} quantified this element of ``surprise'' in the
+following form:
+\begin{equation}
+  \label{eq:I(s)}
+  I_s = - \log_2 P(s).
+\end{equation}
+In this equation, $I_s$ is the information content of a particular
+symbol $s$ from a set of symbols $S$, and $P(s)$ is the likelihood, or
+probability, of the symbol occurring. Particularly, $\sum_{s \in S}
+P(s) = 1$. The equation shows that if a symbol has a decreased
+likelihood of occurring, its information content increases. If a
+symbol's likelihood of occurring reduces by half, one more unit of
+information is conveyed if it does occur.
+
+The average information content of the transmission is the weighted
+sum of the information content of each symbol (also known as the
+expected value):
+\begin{equation}
+  \label{eq:I_avg}
+  I_{\textrm{avg}} = - \sum_{s \in S} P(s) \log_2 P(s).
+\end{equation}
+Note that $I$ is maximized when the probably $P(s)$ of each symbol
+occurring is equal.
+
+These definitions of information entropy are the foundation of our
+information entropy metric.
+
+\subsection{Information entropy metric}
+
+We utilize information entropy to determine the significance, in terms
+of information content, of specific functional requirements in a
+requirements document written using the Common Functional Modeling
+Framework. Previous work \cite{abd-el-hafiz} has shown Shannon's
+formulation of information entropy \cite{shannon}, rather than other,
+more generalized forms \cite{aczel_daroczy}, is most meaningful when
+measuring software systems. Since we position our information entropy
+metric as a requirements metric, the entities we are measuring are
+functional requirements. Each functional requirement has a measurable
+amount of information content, as do the components composing these
+functional requirements.
+
+Other uses of information entropy in requirements metrics often focus
+on metrics of software complexity and predictions of software
+defects. The work of Khoshgoftaar and Allen \cite{khosh_allen}
+analyzed software written in assembly language. The average
+information content of a program was calculated using the set of
+assembly language operators and the frequency of their use. In program
+code with greater average information content, which occurs when
+operators are used more equally, defects were more common. This
+enforced the authors' belief that if more operators are used there
+will be more faults, as programmers are only well-experienced with a
+proper subset of all available operators.
+
+Information entropy is also used to measure the complexity of
+inter-relations in an object-oriented design: classes that call
+methods of other classes \cite{chat_steph}. The authors argue that
+adding new functionality significantly raises average information
+content, therefore affecting a large number of existing classes (that
+is, added functionality calls more methods of existing classes). This
+is an effect a developer would hope to reduce since it adds to
+software complexity.
+
+Further uses of information entropy in software measurement are
+detailed by Abd-el-Hafiz \cite{abd-el-hafiz} and Etzkorn and Gholston
+\cite{etzkorn_gholston}.
+
+The Shannon entropy measure has eight properties that make it useful
+for measuring the information content of software artifacts
+\cite{abd-el-hafiz}. These properties show the consistency of our
+metric with classical interpretations of information entropy:
+\begin{enumerate}
+\item \textit{Nonnegative:} All functional requirements have
+  nonnegative information content.
+\item \textit{Symmetric:} The order in which functional requirements
+  are written is not important.
+\item \textit{Normal:} If a functional requirement is composed of a
+  functional primitive (or object) that operates on (or is operated on
+  by) only two distinct objects (or functional primitives) that
+  equally occur in the requirements document, than that functional
+  primitive (or object) contains 1 unit of information.
+\item \textit{Expansible:} Functional primitives (or objects) do not
+  gain information from the objects (or functional primitives) that
+  they do not operate on (or are operated on by).
+\item \textit{Decisive:} If both the functional primitive and object
+  of a functional requirement are unique in the requirements document,
+  then the functional requirement contains no information.
+\item \textit{Additive:} The information content in any two functional
+  requirements is the sum of the information content of each. This is
+  the justification for the formulation of the information content of
+  a component, $I(c)$.
+\item \textit{Subadditive:} The information content of components is
+  not greater than the sum of the information content of all included
+  functional requirements.
+\item \textit{Maximality:} The information content of a functional
+  requirement is maximized when the frequency of use of all functional
+  primitives and objects relating to the functional requirement are
+  equal (that is, when $P_f(b)$ and $P_b(f)$ are equal for all
+  functional primitives $f$ and objects $b$).
+\end{enumerate}
+
+
+\section{Static metrics}
+
+\subsection{Pointwise mutual information}
+
+A mutual information metric indicates the strength of a pairing of two
+random variables in an information source. In our formulation, the
+random variables are which functional primitive and which object are
+used in functional requirements. That is to say, we measure the
+strength of pairing functional primitives with objects in a set of
+requirements.
+
+For the pointwise mutual information metric, we look at individual
+functional primitives and objects.
+
+\begin{equation}
+\Pmi_R(\pred{p}, \vec{r}_t) \equiv \log_2 \frac{\Prj(\pred{p}, \vec{r}_t)}{\Prn(\pred{p}, f)\Prn(\pred{p}, b)},
+\end{equation}
+where $\vec{r}_t = <\_,f,b,\_,\_,\_,\_>$ and
+\begin{equation*}
+\Prj(\pred{p}, \vec{r}_t) = M_{f,b} / M, \quad \Prn(\pred{p}, f) = M_f / M, \quad \Prn(\pred{p}, b) = M_b / M
+\end{equation*}
+Note that $\Prn(\pred{p}, f)$ and $\Prn(\pred{p}, b)$ represent the
+count of requirements at time $t$ with property $\pred{p}$ and
+functional primitive $f$ or object $b$, respectively, divided by the
+count of \textit{all} requirements at time $t$ with property
+$\pred{p}$.
+
+The value $\Pmi_R$ is zero if the functional primitive and object of
+the requirement are completely independent of each other. In this
+case, $M_f M_b / M = M_{f,b}$.  The functional primitive and object
+are paired in the set of requirements less than would be expected from
+completely independent pairings, $\Pmi_R < 0$, and when the pairing
+occurs more often than chance pairings, $\Pmi_R > 0$. 
+
+\subsection{Mutual information}
+
+The general mutual information metric is the expected value of the
+pointwise mutual information metric for any functional primitive and
+object. Thus, it is a single value and best measured with respect to
+some other changing variable, such as time. We define mutual
+information simply as
+\begin{equation}
+\label{eq:mutual_info}
+I_R(\pred{p}, t) = \sum_{f \in F} \sum_{b \in B} \Prj(\pred{p}, \vec{r}_t) \Pmi_R(\pred{p}, \vec{r}_t),
+\end{equation}
+where $\vec{r}_t$ has second and third components $f$ and $b$,
+respectively.
+
+
+\bibliographystyle{abbrv}
+\bibliography{cumulative}
+
+
+\end{document}

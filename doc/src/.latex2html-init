@@ -1,0 +1,3 @@
+$LATEX2HTMLSTYLES = "$LATEX2HTMLDIR/styles:../../src/lm-latex";
+$TEXINPUTS = "lm-latex:inputs:.:../../src:";
+

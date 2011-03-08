@@ -1,0 +1,22 @@
+Lifecycle Manager Installation Guide
+====================================
+
+Lifecycle Manager is a Trac plugin and is packaged as a Python egg. Follow 
+Trac's instructions for installing plug-ins at:
+
+<http://trac.edgewall.org/wiki/TracPlugins>
+
+Requirements
+------------
+To install and run Lifecycle Manager, the following software packages 
+must be installed:
+
+ *Trac, version 10.4
+ *Python >= 2.4
+ *python-setuptools, version 0.6
+ *python-gd, version 0.5
+ *sqlite, version 3.x
+ *python-pysqlite2, version 2.4
+ *python-clearsilver, version 10.4
+ *libfreetype6-dev, version 6
+ *Matplotlib, version 0.91.2

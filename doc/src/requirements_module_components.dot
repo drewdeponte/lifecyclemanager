@@ -1,0 +1,18 @@
+digraph RequirementModule {
+Root [label = "", shape = "point"];
+Root -> RequirementComponent [label = "1"];
+RequirementComponent [shape = "plaintext"];
+RequirementComponent->ManagementComponent [label = "2"];
+ManagementComponent [shape = "plaintext"];
+RequirementComponent->CachingComponent [label = "3"];
+CachingComponent [shape = "plaintext"];
+RequirementComponent->RelationshipViewsComponent;
+RelationshipViewsComponent [shape = "plaintext"];
+RequirementComponent->MetricsComponent;
+MetricsComponent [shape = "plaintext"];
+RequirementComponent->MetricsViewsComponent;
+MetricsViewsComponent [shape = "plaintext"];
+CachingComponent->RelationshipViewsComponent [label = "4"];
+CachingComponent->MetricsComponent [label = "5"];
+MetricsComponent->MetricsViewsComponent [label = "6"];
+}

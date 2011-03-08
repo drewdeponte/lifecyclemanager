@@ -1,0 +1,52 @@
+8
+
+dir
+547
+https://insearchofartifice.com/lifecyclemanager/svn/trunk/doc/src/lm-latex
+https://insearchofartifice.com/lifecyclemanager/svn
+
+
+
+2008-02-13T03:25:56.501491Z
+391
+josh
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+11c2740d-8708-42d3-bdef-1cf5840ee436
+
+lm-latex.sty
+file
+
+
+
+
+2008-03-12T07:50:38.000000Z
+90572c81cca55e7a79dbd447ce032269
+2008-02-13T03:25:56.501491Z
+391
+josh
+
+lm-latex.perl
+file
+
+
+
+
+2008-03-12T07:50:38.000000Z
+0f8edd3f85dd3c68572a013cbb12d353
+2008-01-31T20:56:47.575420Z
+360
+josh
+

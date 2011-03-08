@@ -1,0 +1,134 @@
+/* -*-ePiX-*- */
+#include <epix.h>
+#include <cmath>
+#include <cstdlib>
+using namespace ePiX;
+
+#define FPS 8
+#define OBJS 7
+
+int reqs[FPS][OBJS] = {
+  {-1, 3, 4, 4, 0, 0, 0},
+  {1, 2, 3, 0, 0, 2, 1},
+  {0, 1, 2, 1, 1, 0, 0},
+  {1, 0, 0, 0, 0, 2, 0},
+  {0, 1, 4, 2, 0, 2, 2},
+  {4, 0, 0, 3, 0, 0, 0},
+  {2, 1, 1, 1, 1, 3, 3},
+  {4, 0, 4, 1, 1, 0, 0}
+};
+
+int fp, obj;
+double totalpmi;
+
+double pmi(double utterances)
+{
+  int numreqs = 0;
+  int sumf[FPS], sumb[OBJS];
+  double pmis[FPS][OBJS];
+
+  totalpmi = 0;
+
+  reqs[0][0] = utterances;
+
+  for(int f = 0; f < FPS; f++)
+    sumf[f] = 0;
+  for(int b = 0; b < OBJS; b++)
+    sumb[b] = 0;
+  
+  for(int f = 0; f < FPS; f++)
+    {
+      for(int b = 0; b < OBJS; b++)
+	{
+	  numreqs += reqs[f][b];
+	  sumf[f] += reqs[f][b];
+	  sumb[b] += reqs[f][b];
+	}
+    }
+
+  for(int f = 0; f < FPS; f++)
+    {
+      for(int b = 0; b < OBJS; b++)
+	{
+	  if(reqs[f][b] > 0 && numreqs > 0 && sumf[f] > 0 && sumb[b] > 0)
+	    {
+	      pmis[f][b] = std::log((double)reqs[f][b] * (double)numreqs / ((double)sumf[f] * (double)sumb[b]))/std::log(2.0);
+	    }
+	  else
+	    {
+	      pmis[f][b] = 0;
+	    }
+
+	  totalpmi += (((double)reqs[f][b] / (double)numreqs) * pmis[f][b]);
+	}
+    }
+
+  std::cout << "% utterances: " << utterances << std::endl;
+  std::cout << "% totalpmi: " << totalpmi << std::endl;
+  /*
+  for(int f = 0; f < FPS; f++)
+    std::cout << "% sumf[" << f << "] = " << sumf[f] << std::endl;
+  for(int b = 0; b < OBJS; b++)
+    std::cout << "% sumb[" << b << "] = " << sumb[b] << std::endl;
+  */
+  std::cout << "% sumf[" << fp << "] = " << sumf[fp] << std::endl;
+  std::cout << "% sumb[" << obj << "] = " << sumb[obj] << std::endl;
+  std::cout << "% numreqs = " << numreqs << std::endl;
+
+
+  /*
+  for(int f = 0; f < FPS; f++)
+    {
+      for(int b = 0; b < OBJS; b++)
+	{
+	  std::cout << "% reqs[" << f << "][" << b << "] = " << reqs[f][b] << std::endl;
+	  std::cout << "% pmis[" << f << "][" << b << "] = " << pmis[f][b] << std::endl;
+	}
+    }
+  */
+  std::cout << "% pmis[fp][obj] = pmis[" << fp << "][" << obj << "] = " << pmis[fp][obj] << std::endl;
+  std::cout << std::endl;
+
+  return pmis[fp][obj];
+}
+
+double calc_totalpmi(double utterances)
+{
+  pmi(utterances);
+  return totalpmi;
+}
+
+int main()
+{
+  picture(P(0, -1.5), P(20, 2), "4 x 2in");
+
+  begin();
+
+  h_axis(20);
+  v_axis(7);
+
+  h_axis_labels(20, P(0,-3), b);
+  v_axis_labels(7, P(-3,0), l);
+
+  for(fp = 0; fp < FPS; fp = fp + 2)
+    {
+      for(obj = 0; obj < OBJS; obj = obj + 2)
+	{
+	  if(fp == 0 && obj == 0)
+	    {
+	      plain(Black());
+	    }
+	  else
+	    {
+	      plain(Black(0.5 * (double)std::rand() / (double)RAND_MAX));
+	    }
+	  plot(pmi, xmin(), xmax(), 20);
+	}
+    }
+
+  plain(Blue());
+  plot(calc_totalpmi, xmin(), xmax(), 10);
+
+  end();
+}
+

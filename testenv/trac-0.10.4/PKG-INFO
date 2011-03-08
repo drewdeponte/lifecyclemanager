@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: trac
+Version: 0.10.4
+Summary: Integrated scm, wiki, issue tracker and project environment
+Home-page: http://trac.edgewall.org/
+Author: Edgewall Software
+Author-email: info@edgewall.com
+License: BSD
+Description: 
+        Trac is a minimalistic web-based software project management and bug/issue
+        tracking system. It provides an interface to the Subversion revision control
+        systems, an integrated wiki, flexible issue tracking and convenient report
+        facilities.
+        
+Platform: UNKNOWN

@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage{lm-latex}
+
+\title{Installation}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\input{project_abstract}
+
+\section{Software Requirements}
+
+Lifecycle Manager is built as a \href{http://trac.edgewall.org/}{Trac} plugin
+and requires no modification to Trac's codebase or an existing Trac installation.
+The plugin has been tested only with the latest stable version of Trac: 
+\href{http://trac.edgewall.org/wiki/TracDownload}{Trac 10.x}.
+
+In this respect, the other software requirements for using Lifecycle Manager are
+only those of Trac. See Trac's
+\href{http://trac.edgewall.org/wiki/TracInstall}{Installation Guide} for further
+information.
+
+\subsection{Python Version}
+\label{sec:python-version}
+
+Of particular interest, however, is your version of Python. Lifecycle Manager is
+built to a particular version of Python. Please check your Python documentation
+for your current version.
+
+
+\section{Installation Procedure}
+
+Download Lifecycle Manager from this location: XXX. Be sure to choose the
+version matching your Python installation (see section \ref{sec:python-version} above).
+
+The distribution of Lifecycle Manager is a `tarball', or tape-archive file
+compressed with GNU's gzip. Download the tarball and extract as follows (where
+\texttt{\$} indicates the shell prompt):
+\begin{verbatim}
+$ tar xzvf TracRequirements-0.1.tar.gz
+\end{verbatim}
+You will see output similar to the following:
+\begin{verbatim}
+AUTHORS
+INSTALL
+NEWS
+README
+TODO
+TracRequirements-0.1-py2.4.egg
+pdf/coding_policy.pdf
+pdf/database_schema.pdf
+pdf/dream_design_policy.pdf
+pdf/general_document_changeset_policy.pdf
+pdf/metrics.pdf
+pdf/proposed_ontology.pdf
+pdf/reports.pdf
+pdf/requirements_policy.pdf
+pdf/software_requirements_specification.pdf
+pdf/testing_policy.pdf
+pdf/wiki_usage_policy.pdf
+\end{verbatim}
+The file of particular interest right now is
+\texttt{TracRequirements-0.1-py2.4.egg}, which is known as the `egg'. Note that the
+string \texttt{py2.4} may differ depending on your Python version (see section
+\ref{sec:python-version} above). Copy the egg to your Trac installation's
+\texttt{plugins} directory. For example,
+\begin{verbatim}
+cp TracRequirements-0.1-py2.4.egg /usr/share/trac/plugins
+\end{verbatim}
+Next restart your Trac webserver.
+
+After your Trac server has restarted, the Lifecycle Manager plugin should be
+loaded. Check the `About/Plugins' page in your Trac installation at this
+address: \texttt{http://trac-install/about/plugins}. In the list you should be
+able to find `RequirementComponent,' `NewrequirementModule,' and
+`RequirementModule.'
+
+Next you are ready to set up permissions to use Lifecycle Manager.
+
+
+\section{Permissions}
+
+Lifecycle Manager has the following permission hierarchy:
+\begin{itemize}
+  \item \texttt{REQUIREMENT\_APPEND} -- comment on a requirement
+  \item \texttt{REQUIREMENT\_CREATE} -- create or modify a requirement
+  	\begin{itemize}
+      \item \texttt{REQUIREMENT\_MODIFY} -- modify the description of a
+      requirement or comment on a requirement
+    \end{itemize}
+  \item \texttt{REQUIREMENT\_VIEW} -- view a requirement or list of requirements
+  \item \texttt{REQUIREMENT\_MODIFY} -- modify the description of a requirement
+  or comment on a requirement
+  	\begin{itemize}
+      \item \texttt{REQUIREMENT\_APPEND} -- comment on a requirement
+    \end{itemize}
+  \item \texttt{REQUIREMENT\_ADMIN} -- perform any action on a requirement
+  	\begin{itemize}
+      \item \texttt{REQUIREMENT\_CREATE} -- create or modify a requirement
+      \item \texttt{REQUIREMENT\_VIEW} -- view a requirement or a list of requirements
+    \end{itemize}
+\end{itemize}
+
+Your Trac users' permissions must be enabled to one or more of the above in
+order to use Lifecycle Manager. For example, add the permission
+\texttt{REQUIREMENT\_VIEW} to a user `joe', perform the following step:
+\begin{verbatim}
+trac-admin /path-to-trac-env permission add joe REQUIREMENT_VIEW
+\end{verbatim}
+
+\section{Conclusion}
+
+After the egg has been installed and permissions delegated, Lifecycle Manager is
+ready to use. Users who can view the list of requirements (permission
+\texttt{REQUIREMENT\_VIEW}) will see a button in their Trac toolbar called
+`Requirements.' Click this button to begin!
+
+\end{document}

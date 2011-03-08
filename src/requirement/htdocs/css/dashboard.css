@@ -1,0 +1,59 @@
+/* Copyright 2007-2008 Lifecycle Manager Development Team
+*  http://www.insearchofartifice.com/lifecyclemanager/wiki/DevTeam
+*
+*  This file is part of Lifecycle Manager.
+*
+*  Lifecycle Manager is free software: you can redistribute it and/or
+*  modify it under the terms of the GNU General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*
+*  Lifecycle Manager is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Lifecycle Manager.  If not, see
+*  <http://www.gnu.org/licenses/>.
+*/
+
+#content {
+ width: 100%;
+}
+#content ul { list-style-type: none; }
+#report {
+ float: right;
+ width: 25%;
+ background: #ffd;
+ border: 1px outset #996;
+ margin-top: 1em;
+ margin-bottom: 1em;
+ padding: .5em 1em;
+
+}
+
+
+#report ul li:before {
+content: "\00BB \0020";
+}
+
+#graph_dash_overall{
+ float: left;
+ width: 70%;
+ margin-top: 1em;
+}
+
+#validation {
+ float: right;
+ width: 25%;
+ background: #ffd;
+ border: 1px outset #996;
+ margin-top: 1em;
+ margin-bottom: 1em;
+ padding: .5em 1em;
+}
+
+#graph_component_req_count{
+ width: 75%;
+}

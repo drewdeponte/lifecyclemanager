@@ -1,0 +1,41 @@
+
+\section{Need Analysis}
+
+\subsection{Need}
+
+Few software packages maintain software requirements throughout the entire
+project lifecycle. As well, most attempts at documenting and maintaining
+software requirements suffer due to over-verbose requirements language syntax
+or use of natural language for requirements. Finally, few metrics exist for
+analyzing requirements documents and using such metrics to inform project
+development.     
+
+\subsection{How Lifecycle Manager solves this need}
+
+Lifecycle Manager tracks software requirements throughout the project lifecycle
+and provides a simple but effective requirements language syntax. Additionally,
+an information theoretic metric may be applied to the requirements knowledge
+stored within the system, providing quantitative insights into the impact of
+particular or groups of software requirements on software quality.    
+
+\subsection{Features}
+
+Lifecycle Manager must first and foremost store knowledge about software
+requirements, as specified in the Common Functional Modeling Framework. Such
+knowledge includes specification of new requirements, changes to existing
+requirements, why additions or changes were made, when they were made, and by
+whom. A project will be split into stages (typically: requirements, design,
+implementation, testing, maintenance), each occurring within defined
+timeframes. Therefore, temporal knowledge about changes in software
+requirements will be correlated with stage timelines, to determine in what
+stage requirements were changed.
+
+The information theoretic metric analyzes frequencies of use of functional
+primitives and objects in the software requirements (see description of CFMF in
+accompanying document). The relative significance of each software requirement
+is then computed and correlated to a functional primitive - software quality
+matrix stored in the system. In this manner, how software requirements impact
+software quality can be determined quantitatively.     
+
+
+

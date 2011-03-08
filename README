@@ -1,0 +1,21 @@
+About Lifecycle Manager
+=======================
+
+Lifecycle Manager is a full-featured collaborative project management
+environment seamlessly integrating project milestones, requirements, tickets,
+documentation, and artifact versioning in a multi-user concurrent
+service-oriented infrastructure. Lifecycle Manager may be used to record,
+predict, and evaluate performance of project features and teams, allowing better
+planning and management of development efforts ranging from simple to complex.
+
+Lifecycle Manager is distributed as a plug-in for Trac under the GNU GPL3.
+
+ *For installation instructions, please see the INSTALL. *
+
+ For further information, see the main Lifecycle Manager web site:
+
+ <http://www.insearchofartifice.com/lifecyclemanager>
+
+Enjoy,
+
+/The Lifecycle Manager Team

@@ -1,0 +1,140 @@
+
+digraph build {
+	subgraph root {
+		graph [odering = "out"]
+		
+		root_all -> root_tests [label = "1"]
+		root_all -> root_docs [label = "2"]
+		
+		root_tracup -> testenv_tracup
+		
+		root_emptyenv -> testenv_emptyenv
+		
+		root_initenv -> testenv_initenv
+		
+		root_tests -> root_egg [label = "1"]
+		root_tests -> root_emptyenv [label = "2"]
+		root_tests -> root_test_install [label = "3"]
+		root_tests -> root_initenv [label = "4"]
+		root_tests -> root_tracup [label = "5"]
+		root_tests -> root_server [label = "6"]
+		root_tests -> testenv_tests [label = "7"]
+		
+		root_alltests -> root_egg [label = "1"]
+		root_alltests -> root_emptyenv [label = "2"]
+		root_alltests -> root_test_install [label = "3"]
+		root_alltests -> root_initenv [label = "4"]
+		root_alltests -> root_tracup [label = "5"]
+		root_alltests -> root_server [label = "6"]
+		root_alltests -> testenv_alltests [label = "7"]
+		
+		root_test_install -> testenv_test_install
+		
+		root_server -> null_root_server
+		null_root_server [label = "testenv/test_server.sh check\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		root_server_start -> null_root_server_start
+		null_root_server_start [label = "testenv/test_server.sh start\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		root_server_stop -> null_root_server_stop
+		null_root_server_stop [label = "testenv/test_server.sh stop\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		root_cleanenv -> testenv_cleanenv
+		
+		root_egg -> src_distegg
+		
+		root_docs -> docsrc_pdfs
+		
+		root_clean -> src_clean [label = "1"]
+		root_clean -> docsrc_clean [label = "2"]
+		root_clean -> testenv_clean [label = "3"]
+		
+		root_dist -> root_all [label = "1"]
+		root_dist -> null_root_dist [label = "2"]
+		null_root_dist [label = "tar czvf progname-version.tar.gz *", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+	}
+	
+	subgraph src {
+		graph [odering = "out"]
+		
+		src_distegg -> null_src_distegg
+		null_src_distegg [label = "python setup.py", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		src_clean -> null_src_clean
+		null_src_clean [label = "rm -rf dist build ...", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+	}
+
+	subgraph testenv {
+		graph [odering = "out"]
+		
+		testenv_test_install -> null_testenv_test_install
+		null_testenv_test_install [label = "cp EGG TRACENV/plugins\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_tests -> null_testenv_tests
+		null_testenv_tests [label = "python TRACSRC/trac/requirement/test.py\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_alltests -> null_testenv_alltests
+		null_testenv_alltests [label = "python TRACSRC/trac/test.py\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_emptyenv -> testenv_svn_path_flag [label = "1"]
+		testenv_emptyenv -> testenv_trac_src_flag [label = "2"]
+		testenv_emptyenv -> testenv_empty_env_flag [label = "3"]
+
+		testenv_empty_env_flag -> null_testenv_empty_env_flag
+		null_testenv_empty_env_flag [label = "mkdir -p TRACENV\ltrac-admin TRACENV initenv\ltouch empty_env_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_initenv -> testenv_emptyenv [label = "1"]
+		testenv_initenv -> testenv_initenv_flag [label = "2"]
+		
+		testenv_initenv_flag -> null_testenv_initenv_flag
+		null_testenv_initenv_flag [label = "mkdir -p TRACENV\lsh trac_admin_actions.sh\ltouch init_env_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_tracup -> null_testenv_tracup
+		null_testenv_tracup [label = "trac-admin /path/ upgrade", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_svn_path_flag -> null_testenv_svn_path_flag
+		null_testenv_svn_path_flag [label = "mkdir -p SVN_ROOT\lsvnadmin create\ltouch svn_path_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_trac_src_flag -> null_testenv_trac_src_flag
+		null_testenv_trac_src_flag [label = "touch trac_src_flag\ltar xzvf trac_src_tar\lln -s requirement\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_clean -> testenv_cleansrc [lable = "1"]
+		testenv_clean -> testenv_cleanenv [label = "2"]
+		testenv_clean -> testenv_cleansvn [label = "3"]
+		
+		testenv_cleansrc -> null_testenv_cleansrc
+		null_testenv_cleansrc [label = "rm -rf TRACSRC\lrm -rf trac_src_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_cleanenv -> null_testenv_cleanenv
+		null_testenv_cleanenv [label = "rm -rf TRACENV\lrm -rf empty_env_flag\lrm -rf init_env_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		testenv_cleansvn -> null_testenv_cleansvn
+		null_testenv_cleansvn [label = "rm -rf SVN_ROOT\lrm -rf svn_path_flag\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+
+	}
+	
+	subgraph docrsc {
+		graph [odering = "out"]
+		
+		docsrc_pdfs -> docsrc_PDFS
+		
+		docsrc_PDFS -> null_docsrc_PDFS
+		null_docsrc_PDFS [label = "pdflatex\lpdflatex\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		docsrc_html -> docsrc_HTMLS
+		
+		docsrc_HTMLS -> null_docsrc_HTMLS
+		null_docsrc_HTMLS [label = "mkdir ../html/$*\llatex2html\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		docsrc_graphs -> docsrc_GRAPHS
+		
+		docsrc_GRAPHS -> null_docsrc_GRAPHS
+		null_docsrc_GRAPHS [label = "dot -Tps $*.dot > $*.ps\lpstopdf $*.ps\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+		
+		docsrc_clean -> null_docsrc_clean
+		null_docsrc_clean [label = "rm -rf ../html/*\lrm -rf ../pdf/*\l", shape = "rectangle", fontsize = "8", fontname = "Courier"]
+
+	}
+}

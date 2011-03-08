@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{lm-latex}
+
+\title{Proposed Ontology}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{abstract}
+Put abstract here\ldots
+\end{abstract}
+
+
+\input{project_abstract}
+
+
+\section{Entities}
+
+
+\subsection{Code}
+
+Code is that entity that must exist for any other entities to have an ontological
+context, a reason to exist. Note that \textit{code} does not mean some
+particular source code in some particular programming language, as found in some
+particular directory like \texttt{src}. Instead, \textit{code} refers to any
+final design document or documents whose execution or interpretation (by human
+or machine) requires only an automated, scripted transformation into such an
+executable or interpretable format that requires
+sufficiently-minimal machine resources (sufficiently-minimal means does not
+require more design work in order to realize such a transformation).
+
+For example, \LaTeX\ or DocBook format constitutes code for a document, since
+transformation into PDF, HTML, etc is sufficiently-minimal. C++ or Java files
+are code since transformation into binary or bytecode format is
+sufficiently-minimal. And so on.
+
+We take the position that code is the outcome of design, or perhaps the
+documentation of design. Projects are measured on the quality of their code.
+While services requiring person-effort (such as installation, troubleshooting,
+etc) are entities in their own right and do not necessarily involve any creation of
+modification of code, Lifecycle Manager tracks the evolution of code and nothing
+more. 
+
+\textit{Code} is often also labeled \textit{source code}. In the license of
+Lifecycle
+Manager, the GNU General Public License version 2, the definition of source is
+explained as:
+\begin{quote}
+The source code for a work means the preferred form of the work for
+making modifications to it.
+\end{quote}
+
+The definition in this document and in the license are comparable.
+
+\subsection{Tickets}
+
+A task, enhancement, or defect is documented in a \textit{ticket}. Tickets
+relate to code in that such tasks, enhancements, and defects relate to code. 
+
+\subsection{Time}
+
+Two entities relate to time: \textit{code} and \textit{tickets}. Changes to code
+(`commits') occur at specific times. Tickets progress through their workflow
+(creation, modification, resolution, reopening, etc) at specific times.
+Individual tickets as well may require resolution before certain dates (`milestones').
+
+\subsection{Requirements}
+
+A project consists of requirements. These requirements are elicited from
+stakeholders and define the goals of successive development. In this respect
+requirements are like the compass that direct changes in code, the content and
+purpose of tickets, and timelines (`milestones').
+
+Requirements evolve as well; requirements are redefined, added, and abandoned.
+They are also prioritized. However, they do not hold a fundamental relationship
+to time (except in the previously-stated respects) because they are forever
+valid (in whatever is each requirement's current form). A requirement is not
+`no longer a requirement' after some period of time, nor is it relevant (beyond
+the generation of reports) when a requirement was redefined, added, or abandoned.
+Once a requirement is stated as such (a `requirement'), it has always been and
+will always be a requirement (unless it is redefined or abandoned).
+
+Requirements, being the compass of development, are the overriding context for
+any development activity. Every activity occurs because of some requirement (for
+if an activity occurred without being required, that activity is simply a waste
+of effort and time). Thus, code and tickets will typically specify to which
+requirement or requirements they relate, which requirement or requirements they
+help \textit{satisfy} or \textit{satisfice}.
+
+
+\end{document}

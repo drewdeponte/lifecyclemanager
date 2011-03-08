@@ -1,0 +1,288 @@
+\documentclass{article}
+\usepackage{lm-latex}
+
+\title{Database Schema}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\input{project_abstract}
+
+\section{Tables}
+
+
+\subsection{fp}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id (PK) & int & Auto-increments &  \\
+\hline
+name (PK) & text & Unique, Not Null & \\
+\hline
+status & text & & \\
+\hline
+description & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+
+\subsection{hyponym}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id (PK) & int & Auto-increments &  \\
+\hline
+name (PK) & text & Unique, Not Null & \\
+\hline
+fp & text & Parent functional primitive & foreignkey fp.id, fp.name \\
+\hline
+status & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{object}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id (PK) & int & Auto-increments &  \\
+\hline
+name (PK) & text & Unique, Not Null & \\
+\hline
+status & text & & \\
+\hline
+description & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+
+\subsection{fp\_change}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id (PK) & int & Auto-increments & foreign key hyponym.id \\
+\hline
+time (PK) & int & & \\
+\hline
+author & text & & \\
+\hline
+field  (PK) & text & & \\
+\hline
+oldvalue & text & & \\
+\hline
+newvalue & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+\subsection{hyponym\_change}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id (PK) & int & Auto-increments & foreign key hyponym.id \\
+\hline
+time (PK) & int & & \\
+\hline
+author & text & & \\
+\hline
+field  (PK) & text & & \\
+\hline
+oldvalue & text & & \\
+\hline
+newvalue & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{object\_change}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+id(PK) & int & Auto-increments&\\
+\hline
+name & text & Unique, Not Null &\\
+\hline
+description & text & & \\
+\hline
+status & text & & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+
+
+\subsection{requirement}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & component.name \\
+\hline
+fp (PK) & text & Functional primitive & fp.name \\
+\hline
+object (PK) & text & Object & object.name \\
+\hline
+time & integer & Time inserted (`created') & \\
+\hline
+changetime & integer & Time of last modification & \\
+\hline
+creator & text & Creator of the requirement & \\
+\hline
+status & text & Status (`enabled' or `disabled') & \\
+\hline
+description & text & Description of the requirement & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{requirement\_change}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & requirement.component \\
+\hline
+fp (PK) & text & Functional primitive & requirement.fp \\
+\hline
+object (PK) & text & Object & requirement.object \\
+\hline
+time (PK) & integer & Time inserted (`created') & \\
+\hline
+author & text & Author of the change & \\
+\hline
+field (PK) & text & Field that was changed & \\
+\hline
+oldvalue & text & Old value of the field & \\
+\hline
+newvalue & text & New value of the field & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{requirement\_custom}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & requirement.component \\
+\hline
+fp (PK) & text & Functional primitive & requirement.fp \\
+\hline
+object (PK) & text & Object & requirement.object \\
+\hline
+name (PK) & text & Name of the custom field & \\
+\hline
+value & text & Value of the custom field & \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{requirement\_ticket\_cache}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & requirement.component \\
+\hline
+fp (PK) & text & Functional primitive & requirement.fp \\
+\hline
+object (PK) & text & Object & requirement.object \\
+\hline
+ticket (PK) & integer & Ticket ID & ticket.id \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{requirement\_wiki\_cache}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & requirement.component \\
+\hline
+fp (PK) & text & Functional primitive & requirement.fp \\
+\hline
+object (PK) & text & Object & requirement.object \\
+\hline
+wiki\_name (PK) & text & Wiki page name & wiki.name \\
+\hline
+wiki\_version (PK) & integer & Wiki page version & wiki.version \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\subsection{requirement\_rev\_cache}
+
+{\footnotesize
+\begin{centering}
+\begin{tabular}{p{0.25\linewidth}p{0.07\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+\textbf{Field} & \textbf{Type} & \textbf{Notes} & \textbf{Relations} \\
+\hline
+component (PK) & text & & requirement.component \\
+\hline
+fp (PK) & text & Functional primitive & requirement.fp \\
+\hline
+object (PK) & text & Object & requirement.object \\
+\hline
+rev (PK) & text & Revision ID & revision.rev \\
+\hline
+\end{tabular}
+\end{centering}
+}
+
+
+\end{document}

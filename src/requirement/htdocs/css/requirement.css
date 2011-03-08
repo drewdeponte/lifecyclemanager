@@ -1,0 +1,166 @@
+/* Copyright 2007-2008 Lifecycle Manager Development Team
+*  http://www.insearchofartifice.com/lifecyclemanager/wiki/DevTeam
+*
+*  This file is part of Lifecycle Manager.
+*
+*  Lifecycle Manager is free software: you can redistribute it and/or
+*  modify it under the terms of the GNU General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*
+*  Lifecycle Manager is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Lifecycle Manager.  If not, see
+*  <http://www.gnu.org/licenses/>.
+*/
+
+#content { float: left; width: 600px; }
+
+#newrequirement #description { width: 100% }
+#newrequirement #properties { width: 100% }
+
+#requirement {
+ background: #ffd;
+ border: 1px outset #996;
+ margin-top: 1em;
+ padding: .5em 1em;
+ position: relative;
+}
+h1 .status { color: #444; text-transform: lowercase; }
+#requirement h2.summary { margin: 0 0 .8em 0 }
+#requirement .date { color: #996; float: right; font-size: 85%; position: relative }
+#requirement .date p { margin: 0 }
+
+#requirement table.properties {
+ border-top: 1px solid #dd9;
+ border-collapse: collapse;
+ table-layout: fixed;
+ width: 100%;
+}
+#requirement table.properties tr { border-bottom: 1px dotted #eed }
+#requirement table.properties td, #requirement table.properties th {
+ font-size: 80%;
+ padding: .5em 1em;
+ vertical-align: top;
+}
+#requirement table.properties th {
+ color: #663;
+ font-weight: normal;
+ text-align: left;
+ width: 20%;
+}
+#requirement table.properties td { width: 30% }
+#requirement table.properties .description { border-top: 1px solid #dd9 }
+
+
+#requirement .description h3 {
+ border-bottom: 1px solid #dd9;
+ color: #663;
+ font-size: 100%;
+ font-weight: normal;
+}
+#requirement .description h3 .lastmod {
+ font-size: 90%;
+}
+#requirement .inlinebuttons { 
+ float: right;
+ position: relative;
+ bottom: 0.3em;
+}
+
+#changelog { border: 1px outset #996; padding: 1em }
+#changelog h3 {
+ border-bottom: 1px solid #d7d7d7;
+ color: #999;
+ font-size: 100%;
+ font-weight: normal;
+}
+#changelog .threading, #changelog .inlinebuttons {
+ float: right;
+ position: relative;
+ bottom: 0.3em;
+}
+
+#changelog .changes { list-style: square; margin-left: 2em; padding: 0 }
+#changelog .comment { margin-left: 2em }
+
+form .field { margin-top: .75em; width: 100% }
+form #comment { width: 100% }
+form #req_description { width: 100% }
+
+#properties { white-space: nowrap; line-height: 160%; padding: .5em }
+#properties table { border-spacing: 0; width: 100%; }
+#properties table th {
+ padding: .4em;
+ text-align: right;
+ width: 20%;
+ vertical-align: top;
+}
+#properties table th.col2 { border-left: 1px dotted #d7d7d7 }
+#properties table td { vertical-align: middle; width: 30% }
+#properties table td.fullrow { vertical-align: middle; width: 80% }
+
+#action { line-height: 2em }
+
+fieldset.radio { border: none; margin: 0; padding: 0 }
+fieldset.radio legend {
+ color: #000;
+ float: left;
+ font-size: 100%;
+ font-weight: normal;
+ padding: 0 1em 0 0;
+}
+fieldset.radio label { padding-right: 1em }
+
+div.autocomplete
+{
+  position: absolute;
+  max-height: 300px;
+  overflow: auto;
+  background-color: white;
+  border: 1px solid #d7d7d7;
+  margin: 0px;
+  padding: 0px;
+}
+
+div.autocomplete ul
+{ 
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+div.autocomplete ul li.selected { background-color: #ffd; }
+
+div.autocomplete ul li
+{ 
+  list-style-type: none;
+  display: block;
+  margin: 0px;
+  padding: 2px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.8em;
+  position: relative;
+}
+
+div.autocomplete ul li span.informal
+{
+  font-style: italic;
+  font-weight: normal;
+  font-size: 0.8em;
+  position: absolute;
+  top: 2px;
+  right: 0;
+}
+
+div#graphs {
+    width: 250px;
+    float: left;
+    margin-left: 25px;
+    margin-bottom: 50px;
+}

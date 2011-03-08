@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/lifecyclemanager/svn/!svn/ver/545/trunk/src/requirement/tests
+END
+api.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/lifecyclemanager/svn/!svn/ver/441/trunk/src/requirement/tests/api.py
+END
+web_ui.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/lifecyclemanager/svn/!svn/ver/529/trunk/src/requirement/tests/web_ui.py
+END
+wikisyntax.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/lifecyclemanager/svn/!svn/ver/397/trunk/src/requirement/tests/wikisyntax.py
+END
+report.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/lifecyclemanager/svn/!svn/ver/454/trunk/src/requirement/tests/report.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/lifecyclemanager/svn/!svn/ver/397/trunk/src/requirement/tests/__init__.py
+END
+model.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/lifecyclemanager/svn/!svn/ver/545/trunk/src/requirement/tests/model.py
+END
+cache.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/lifecyclemanager/svn/!svn/ver/397/trunk/src/requirement/tests/cache.py
+END
+metric.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/lifecyclemanager/svn/!svn/ver/491/trunk/src/requirement/tests/metric.py
+END
